@@ -60,3 +60,8 @@ Path of the model created
 ```solara run application/website/03-ml-display-rec.py```
 
 ![Rec Sys User Based](readmeAssets/ml-recsys-users-ratings.jpg)
+
+### To Come!!
+
+- API for the Rec Sys
+- Use of a Vector Database instead of a static Pytorch model
