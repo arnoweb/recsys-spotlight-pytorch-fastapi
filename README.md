@@ -37,7 +37,7 @@ recommendation models.
 
 ![Rec Sys Explore Data](readmeAssets/ml-recsys-explore.jpg)
 
-### Recommend Products based on similarities of Products
+### Recommend Products based on similarities of Products - Content based Filtering
 #### 2 methods availables for vectorization of bags of words:
 - **CountVectorizer**
 - **TfIdfVectorizer**
@@ -55,7 +55,7 @@ Path of the model created
 ```model/movies_users_rating_model.pth```
 
 
-### Display the recommendation products to the user
+### Display the recommendation products to the user - Collaborative Filtering
 #### Based on the machine learning model - PyTorch Model
 ```solara run application/website/03-ml-display-rec.py```
 
