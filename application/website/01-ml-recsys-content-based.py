@@ -1,6 +1,8 @@
 import sys
+import os
+from pathlib import Path
 
-sys.path.append('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/application/utils')
+sys.path.append(os.path.join(os.getcwd(), 'application/utils'))
 from tools import *
 from exploreData import *
 
@@ -26,6 +28,15 @@ select_default_shows = solara.reactive(work_default_title)
 
 @solara.component
 def Page():
+
+    solara.Style(
+        """
+        .v-application--wrap {
+            padding:1em; !important
+        }
+        """
+    )
+
     solara.Markdown(
         f"""
         # Machine Learning - Recommandation d'oeuvres - spectacles ou films
@@ -43,7 +54,8 @@ def Page():
     stopwords_french = stopwords.words('french')
 
     # Dataframe of items
-    data = get_data()
+    data = get_data(product_id=None, count=None)
+
     solara.DataFrame(data, items_per_page=5)
 
     solara.Markdown(
@@ -51,7 +63,7 @@ def Page():
          ## Les oeuvres - création d'un ensemble de mots pour caractériser les oeuvres
      """
     )
-    # Création du bags of Words et de la répétition des mots sur certaines caractéristiques des spectacles
+    # Création du bags of Words et de la répétition des mots sur certaines caractéristiques des oeuvres
     # If no description is given in the dataset, we cannot recommand it
     data = data.dropna(subset=['description'], how='any')
 
@@ -70,6 +82,7 @@ def Page():
 
     # we'll try to find similarities based on the Description Words of a work
     data_similarities = data['bag_of_words']
+
     X = np.array(data_similarities)
 
     data_for_display_only = pd.DataFrame(data['bag_of_words'])
@@ -119,6 +132,7 @@ def Page():
 
     print(df_info(data_ratings_sorted, 'data_ratings_sorted'))
     print(df_info(data_ratings_2_sorted, 'data_ratings_2_sorted'))
+
 
     data_items = pd.DataFrame()
     #data_items['work_id'] = data_ratings['work_id']
@@ -252,7 +266,7 @@ def Page():
     solara.Markdown(
         f"""
         ## Moteur de recommandations des oeuvres - démarrage à froid - étape 1
-        ### Sans prise en compte des ventes
+        ### Sans prise en compte des interactions utilisateurs
     """
     )
     solara.Markdown(
@@ -283,12 +297,11 @@ def Page():
         sv = work_default_title
 
     rec_df_search_select = data[data['title'] == sv]
-    solara.DataFrame(rec_df_search_select, items_per_page=5)
+
 
     rec_df_from_select = content_recommender(sv, df=data, with_score=False)
-    solara.DataFrame(rec_df_from_select, items_per_page=5)
 
-    solara.Markdown(f"####Les recommandations pour oeuvre sélectionnée : *{select_default_shows.value}*")
+    solara.Markdown(f"####Les recommandations pour l'oeuvre sélectionnée : *{select_default_shows.value}*")
 
     with solara.Row(gap="10px", justify="space-around"):
 
@@ -297,20 +310,29 @@ def Page():
             show_title = row['title']
             show_genre = row['genre_1']
             #show_venue = row['venue']
+            show_description = row['description']
 
             with solara.Card(title=show_title, subtitle=show_genre):
 
-                solara.Markdown(f"{show_title}")
+                #solara.Markdown(f"{show_title}")
 
                 if pd.notna(row['url']):
                     image_url = row['url']
                 else:
-                    image_url = 'https://res.cloudinary.com/opera-national-de-paris/image/upload/c_crop,h_704,w_610,x_305,y_0/v1441203913/static/placeholder_black.jpg'
+                    image_url = 'https://placehold.co/300x400?text=No%20Image'
 
-                solara.Image(image_url)
+                solara.Image(
+                   image=image_url,
+                    width="30%"
+                )
+
+                solara.Markdown(f"{show_description}")
+
+    #solara.DataFrame(rec_df_search_select, items_per_page=5)
+    solara.DataFrame(rec_df_from_select, items_per_page=5)
 
     solara.Markdown(
-        f"####Les recommandations en fonction du Rating par utilisateur pour l'oeuvre sélectionnée : {select_default_shows.value}")
+        f"####Les recommandations en fonction des ventes pour l'oeuvre sélectionnée : {select_default_shows.value}")
 
     rec_df_rating_from_select = content_recommender(sv, df=data_with_score, with_score=True)
 

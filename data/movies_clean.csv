@@ -1,6 +1,6 @@
 work_id,title,description,genre_1,genre_2,genre_3,auteur,year,url
 1,Toy Story,A cowboy doll is profoundly threatened and jealous when a new spaceman figure supplants him as top toy in a boy's room.,Adventure,Animation,Children|Comedy|Fantasy,John Lasseter,1995,"https://m.media-amazon.com/images/M/MV5BMDU2ZWJlMjktMTRhMy00ZTA5LWEzNDgtYmNmZTEwZTViZWJkXkEyXkFqcGdeQXVyNDQ2OTk4MzI@._V1_UX67_CR0,0,67,98_AL_.jpg"
-2,Jumanji,,Adventure,Children,Fantasy,,1995,
+2,Jumanji,"Four teens are pulled into a magical video game, facing dangerous challenges in a jungle to escape and survive together.",Adventure,Children,Fantasy,Joe Johnston,1995,https://m.media-amazon.com/images/I/91gMfB-mlaL.__AC_SX300_SY300_QL70_ML2_.jpg
 3,Grumpier Old Men,,Comedy,Romance,,,1995,
 4,Waiting to Exhale,,Comedy,Drama,Romance,,1995,
 5,Father of the Bride Part II,,Comedy,,,,1995,
@@ -522,7 +522,7 @@ work_id,title,description,genre_1,genre_2,genre_3,auteur,year,url
 587,Ghost,,Comedy,Drama,Fantasy|Romance|Thriller,,1990,
 588,Aladdin,A kindhearted street urchin and a power-hungry Grand Vizier vie for a magic lamp that has the power to make their deepest wishes come true.,Adventure,Animation,Children|Comedy|Musical,Ron Clements,1992,"https://m.media-amazon.com/images/M/MV5BY2Q2NDI1MjUtM2Q5ZS00MTFlLWJiYWEtNTZmNjQ3OGJkZDgxXkEyXkFqcGdeQXVyNTI4MjkwNjA@._V1_UX67_CR0,0,67,98_AL_.jpg"
 589,Terminator 2: Judgment Day,"A cyborg, identical to the one who failed to kill Sarah Connor, must now protect her teenage son, John Connor, from a more advanced and powerful cyborg.",Action,Sci-Fi,,James Cameron,1991,"https://m.media-amazon.com/images/M/MV5BMGU2NzRmZjUtOGUxYS00ZjdjLWEwZWItY2NlM2JhNjkxNTFmXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_UX67_CR0,0,67,98_AL_.jpg"
-590,Dances with Wolves,"Lieutenant John Dunbar, assigned to a remote western Civil War outpost, befriends wolves and Indians, making him an intolerable aberration in the military.",Adventure,Drama,Western,Kevin Costner,1990,"https://m.media-amazon.com/images/M/MV5BMTY3OTI5NDczN15BMl5BanBnXkFtZTcwNDA0NDY3Mw@@._V1_UX67_CR0,0,67,98_AL_.jpg"
+590,Dances with Wolves,"Lieutenant John Dunbar, assigned to a remote western Civil War outpost, befriends wolves and Indians, making him an intolerable aberration in the military.",Adventure,Drama,Western,Kevin Costner,1990,https://m.media-amazon.com/images/I/51gLqU7RzCL._AC_.jpg
 592,Batman,,Action,Crime,Thriller,,1989,
 593,"Silence of the Lambs, The",,Crime,Horror,Thriller,,1991,
 594,Snow White and the Seven Dwarfs,,Animation,Children,Drama|Fantasy|Musical,,1937,
@@ -967,7 +967,7 @@ work_id,title,description,genre_1,genre_2,genre_3,auteur,year,url
 1203,12 Angry Men,A jury holdout attempts to prevent a miscarriage of justice by forcing his colleagues to reconsider the evidence.,Drama,,,Sidney Lumet,1957,"https://m.media-amazon.com/images/M/MV5BMWU4N2FjNzYtNTVkNC00NzQ0LTg0MjAtYTJlMjFhNGUxZDFmXkEyXkFqcGdeQXVyNjc1NTYyMjg@._V1_UX67_CR0,0,67,98_AL_.jpg"
 1204,Lawrence of Arabia,"The story of T.E. Lawrence, the English officer who successfully united and led the diverse, often warring, Arab tribes during World War I in order to fight the Turks.",Adventure,Drama,War,David Lean,1962,"https://m.media-amazon.com/images/M/MV5BYWY5ZjhjNGYtZmI2Ny00ODM0LWFkNzgtZmI1YzA2N2MxMzA0XkEyXkFqcGdeQXVyNjUwNzk3NDc@._V1_UY98_CR0,0,67,98_AL_.jpg"
 1206,"Clockwork Orange, A",,Crime,Drama,Sci-Fi|Thriller,,1971,
-1207,To Kill a Mockingbird,"Atticus Finch, a lawyer in the Depression-era South, defends a black man against an undeserved rape charge, and his children against prejudice.",Drama,,,Robert Mulligan,1962,"https://m.media-amazon.com/images/M/MV5BNmVmYzcwNzMtMWM1NS00MWIyLThlMDEtYzUwZDgzODE1NmE2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_UX67_CR0,0,67,98_AL_.jpg"
+1207,To Kill a Mockingbird,"Atticus Finch, a lawyer in the Depression-era South, defends a black man against an undeserved rape charge, and his children against prejudice.",Drama,,,Robert Mulligan,1962,https://m.media-amazon.com/images/I/81djA1ifrdL.__AC_SX300_SY300_QL70_ML2_.jpg
 1208,Apocalypse Now,A U.S. Army officer serving in Vietnam is tasked with assassinating a renegade Special Forces Colonel who sees himself as a god.,Action,Drama,War,Francis Ford Coppola,1979,"https://m.media-amazon.com/images/M/MV5BMDdhODg0MjYtYzBiOS00ZmI5LWEwZGYtZDEyNDU4MmQyNzFkXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_UX67_CR0,0,67,98_AL_.jpg"
 1209,Once Upon a Time in the West (C'era una volta il West),,Action,Drama,Western,,1968,
 1210,Star Wars: Episode VI - Return of the Jedi,"After a daring mission to rescue Han Solo from Jabba the Hutt, the Rebels dispatch to Endor to destroy the second Death Star. Meanwhile, Luke struggles to help Darth Vader back from the dark side without falling into the Emperor's trap.",Action,Adventure,Sci-Fi,Richard Marquand,1983,"https://m.media-amazon.com/images/M/MV5BOWZlMjFiYzgtMTUzNC00Y2IzLTk1NTMtZmNhMTczNTk0ODk1XkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_UX67_CR0,0,67,98_AL_.jpg"
@@ -2495,7 +2495,7 @@ work_id,title,description,genre_1,genre_2,genre_3,auteur,year,url
 3111,Places in the Heart,,Drama,,,,1984,
 3112,'night Mother,,Drama,,,,1986,
 3113,End of Days,,Action,Fantasy,Horror|Mystery|Thriller,,1999,
-3114,Toy Story 2,"When Woody is stolen by a toy collector, Buzz and his friends set out on a rescue mission to save Woody before he becomes a museum toy property with his roundup gang Jessie, Prospector, and Bullseye.",Adventure,Animation,Children|Comedy|Fantasy,John Lasseter,1999,"https://m.media-amazon.com/images/M/MV5BMWM5ZDcxMTYtNTEyNS00MDRkLWI3YTItNThmMGExMWY4NDIwXkEyXkFqcGdeQXVyNjUwNzk3NDc@._V1_UX67_CR0,0,67,98_AL_.jpg"
+3114,Toy Story 2,"When Woody is stolen by a toy collector, Buzz and his friends set out on a rescue mission to save Woody before he becomes a museum toy property with his roundup gang Jessie, Prospector, and Bullseye.",Adventure,Animation,Children|Comedy|Fantasy,John Lasseter,1999,https://m.media-amazon.com/images/I/71FZDnRouuL._AC_SY741_.jpg
 3115,Flawless,,Drama,,,,1999,
 3117,Ride with the Devil,,Drama,Romance,War,,1999,
 3120,"Distinguished Gentleman, The",,Comedy,,,,1992,
@@ -2786,7 +2786,7 @@ work_id,title,description,genre_1,genre_2,genre_3,auteur,year,url
 3506,North Dallas Forty,,Comedy,Drama,,,1979,
 3507,"Odd Couple, The",,Comedy,,,,1968,
 3508,"Outlaw Josey Wales, The",,Action,Adventure,Drama|Thriller|Western,,1976,
-3510,Frequency,,Drama,Thriller,,,2000,
+3510,Frequency,"A brilliant mathematician becomes obsessed with communicating with his late father through radio signals, bridging time across decades.",Drama,Thriller,,Gregory Hoblit,2000,https://m.media-amazon.com/images/I/81Z6n021OzL.__AC_SX300_SY300_QL70_ML2_.jpg
 3512,Return to Me,,Drama,Romance,,,2000,
 3513,Rules of Engagement,,Drama,Thriller,,,2000,
 3515,Me Myself I,,Comedy,Romance,,,2000,
@@ -4703,7 +4703,7 @@ work_id,title,description,genre_1,genre_2,genre_3,auteur,year,url
 6373,Bruce Almighty,,Comedy,Drama,Fantasy|Romance,,2003,
 6374,"In-Laws, The",,Comedy,,,,2003,
 6375,Gigantic (A Tale of Two Johns),,Documentary,,,,2002,
-6377,Finding Nemo,"After his son is captured in the Great Barrier Reef and taken to Sydney, a timid clownfish sets out on a journey to bring him home.",Adventure,Animation,Children|Comedy,Andrew Stanton,2003,"https://m.media-amazon.com/images/M/MV5BZTAzNWZlNmUtZDEzYi00ZjA5LWIwYjEtZGM1NWE1MjE4YWRhXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_UX67_CR0,0,67,98_AL_.jpg"
+6377,Finding Nemo,"After his son is captured in the Great Barrier Reef and taken to Sydney, a timid clownfish sets out on a journey to bring him home.",Adventure,Animation,Children|Comedy,Andrew Stanton,2003,https://m.media-amazon.com/images/I/81J-cYKt-2L._AC_SY741_.jpg
 6378,"Italian Job, The",,Action,Crime,,,2003,
 6379,Wrong Turn,,Horror,Thriller,,,2003,
 6380,Capturing the Friedmans,,Documentary,,,,2003,

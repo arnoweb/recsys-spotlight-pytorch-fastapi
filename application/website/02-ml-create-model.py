@@ -1,7 +1,7 @@
 import sys
 import os
 
-sys.path.append('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/application/utils')
+sys.path.append(os.path.join(os.getcwd(), 'application/utils'))
 from exploreData import *
 from modelData import *
 
@@ -81,7 +81,7 @@ def Page():
     ############################################################################
     ## Vérification existance du model torch
     ############################################################################
-    model_path = '/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/model/' + DATA_WORK + '_users_rating_model.pth'
+    model_path = '/Users/a.breton/digital_projects/machine-learning/recsys-spotlight-pytorch-fastapi/model/' + DATA_WORK + '_users_rating_model.pth'
 
     if not os.path.exists(model_path):
 

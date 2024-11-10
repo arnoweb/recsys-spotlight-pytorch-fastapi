@@ -1,7 +1,7 @@
 import sys
 import os
 
-sys.path.append('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/application/utils')
+sys.path.append(os.path.join(os.getcwd(), 'application/utils'))
 from exploreData import *
 from modelData import *
 
@@ -24,6 +24,15 @@ slider_rmse_iteration_default = solara.reactive(0)
 
 @solara.component
 def Page():
+
+    solara.Style(
+        """
+        .v-application--wrap {
+            padding:1em; !important
+        }
+        """
+    )
+
     solara.Markdown(
         f"""
         # Machine Learning - Recommandation d'oeuvres - spectacles ou films
@@ -46,7 +55,7 @@ def Page():
     ############################################################################
     ## Check of torch model file
     ############################################################################
-    model_path = '/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/model/' + DATA_WORK + '_users_rating_model.pth'
+    model_path = '/Users/a.breton/digital_projects/machine-learning/recsys-spotlight-pytorch-fastapi/model/' + DATA_WORK + '_users_rating_model.pth'
 
     if os.path.exists(model_path):
 

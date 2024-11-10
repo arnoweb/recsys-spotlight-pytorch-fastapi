@@ -1,4 +1,5 @@
 import sys
+import os
 
 sys.path.append('//application/utils')
 from tools import *
@@ -9,6 +10,41 @@ import numpy as np
 import pandas as pd
 from nltk.corpus import stopwords
 
+# Get the current working directory
+current_dir = os.getcwd()
+
+######## SHOWS
+relative_path_shows_items = "data/shows-23-24-items.csv"
+absolute_path_shows_items = os.path.join(current_dir, relative_path_shows_items)
+
+relative_path_shows_users = "data/shows-23-24-users.csv"
+absolute_path_shows_users = os.path.join(current_dir, relative_path_shows_users)
+
+relative_path_shows_purchases = "data/shows-23-24-purchase.csv"
+absolute_path_shows_purchases = os.path.join(current_dir, relative_path_shows_purchases)
+
+relative_path_shows_users_items_views = "data/shows-23-24-users-items-views.csv"
+absolute_path_shows_users_items_views = os.path.join(current_dir, relative_path_shows_users_items_views)
+
+######## MOVIES
+relative_path_movies_items = "data/movies_clean.csv"
+absolute_path_movies_items = os.path.join(current_dir, relative_path_movies_items)
+
+relative_path_movies_users = "data/movies_users.csv"
+absolute_path_movies_users = os.path.join(current_dir, relative_path_movies_users)
+
+relative_path_movies_users_purchases = "data/movies_users_purchases.csv"
+absolute_path_movies_users_purchases = os.path.join(current_dir, relative_path_movies_users_purchases)
+
+relative_path_movies_users_page_views = "data/movies_users_page_views.csv"
+absolute_path_movies_users_page_views = os.path.join(current_dir, relative_path_movies_users_page_views)
+
+relative_path_movies_users_ratings = "data/movies_ratings.csv"
+absolute_path_movies_users_ratings = os.path.join(current_dir, relative_path_movies_users_ratings)
+
+relative_path_movies_users_tags = "data/movies_tags.csv"
+absolute_path_movies_users_tags = os.path.join(current_dir, relative_path_movies_users_tags)
+
 
 def display_data(df):
     solara.DataFrame(df, items_per_page=5)
@@ -17,21 +53,35 @@ DATA_WORK = 'movies'
 #DATA_WORK = 'shows'
 
 if DATA_WORK == 'shows':
-    def get_data():
+    def get_data(product_id, count):
         #Dataframe of items
-        data = pd.read_csv('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/data/shows-23-24-items.csv')
+        data = pd.read_csv(absolute_path_shows_items)
         data = data[['work_id', 'title', 'description', 'genre_1', 'auteur', 'url']]
+
+        if product_id is not None:
+            if (data['work_id'] == product_id).any():
+                data = data[data['work_id'] == product_id]
+            else:
+                data_message = {
+                    'message_error': 'This product ID does not exist',
+                }
+                data = pd.DataFrame(data)
+
+        if count is not None:
+            data = data.iloc[:count]
+
         return data
+
     def get_data_users():
-        data_users = pd.read_csv('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/data/shows-23-24-users.csv')
+        data_users = pd.read_csv(absolute_path_shows_users)
         data_users['firstlastname_user'] = data_users['firstname_user'] + ' ' + data_users['lastname_user']
         return data_users
 
     def get_data_purchase():
-        data_purchase = pd.read_csv('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/data/shows-23-24-purchase.csv')
+        data_purchase = pd.read_csv(absolute_path_shows_purchases)
         return data_purchase
     def get_data_views():
-        data_views = pd.read_csv('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/data/shows-23-24-users-items-views.csv')
+        data_views = pd.read_csv(absolute_path_shows_users_items_views)
         return data_views
 
     def get_work_default():
@@ -41,7 +91,7 @@ elif DATA_WORK == 'movies':
 
     def get_data(product_id, count):
         # Dataframe of items
-        data = pd.read_csv('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/data/movies_clean.csv')
+        data = pd.read_csv(absolute_path_movies_items)
         data = data[['work_id', 'title', 'description', 'genre_1', 'auteur', 'year', 'url']]
         data['work_id'] = data['work_id'].astype(int)
 
@@ -60,29 +110,31 @@ elif DATA_WORK == 'movies':
         return data
 
     def get_data_users():
-        data_users = pd.read_csv('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/data/movies_users.csv')
+        data_users = pd.read_csv(absolute_path_movies_users)
         data_users['user_firstlastname'] = data_users['user_firstname'] + ' ' + data_users['user_lastname']
         return data_users
 
     def get_data_purchase():
-        data_purchase = pd.read_csv('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/data/movies_users_purchases.csv')
+        data_purchase = pd.read_csv(absolute_path_movies_users_purchases)
         return data_purchase
 
     def get_data_views():
-        data_views = pd.read_csv('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/data/movies_users_page_views.csv')
+        data_views = pd.read_csv(absolute_path_movies_users_page_views)
         return data_views
 
     def get_data_users_ratings():
-        data_users_ratings = pd.read_csv('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/data/movies_ratings.csv')
+        data_users_ratings = pd.read_csv(absolute_path_movies_users_ratings)
         return data_users_ratings
 
     def get_data_users_tags():
-        data_users_tags = pd.read_csv('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/data/movies_tags.csv')
+        data_users_tags = pd.read_csv(absolute_path_movies_users_tags)
         return data_users_tags
 
     def get_work_default():
-        return 'Die Hard'
+        #return 'Die Hard'
         #return 'Jurassic Park'
+        #return 'Braveheart'
+        return 'Toy Story'
 
 
 def get_data_similarities(data):
