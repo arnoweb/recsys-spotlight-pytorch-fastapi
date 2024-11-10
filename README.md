@@ -28,9 +28,16 @@ recommendation models.
 - **FastAPI**: A high-performance API framework used to expose the recommendation model for external access.
 - **Solara**: A React-based framework for building a Web UI, allowing users to interact with the recommendation model and visualize results.
 
-## How to use the Recommandation System
+## How to use the Recommendation System
 
-### Recommand Products based on similarities of Products
+### Manage Data
+- **Exploration**
+- **Preparation**
+- **Evaluation**
+
+![Rec Sys Explore Data](readmeAssets/ml-recsys-explore.jpg)
+
+### Recommend Products based on similarities of Products
 #### 2 methods availables for vectorization of bags of words:
 - **CountVectorizer**
 - **TfIdfVectorizer**
@@ -48,7 +55,7 @@ Path of the model created
 ```model/movies_users_rating_model.pth```
 
 
-### Display the recommandation products to the user
+### Display the recommendation products to the user
 #### Based on the machine learning model - PyTorch Model
 ```solara run application/website/03-ml-display-rec.py```
 
