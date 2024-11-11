@@ -5,6 +5,18 @@
 ![FastAPI Version](https://img.shields.io/badge/fastapi-0.115%2B-green)
 ![Solara Version](https://img.shields.io/badge/solara-1.41%2B-orange)
 ![Spotlight Version](https://img.shields.io/badge/spotlight-0.1.6%2B-red)
+
+## What is this project is for?
+
+You can provide recommended products on a page of your website to your users based of your internal private data (eg: your products, your users ratings, your users purchases or interactions).<br>
+
+It will then display relevant list of products on your website while your user is browsing your Product Page and for none connected users (content-based filtering) and connected users (collaborative filtering).
+
+Whatever CMS (Wordpress, Drupal, Prismic) or custom backend (Laravel, Symfony..) you currently use, if you have data, this project can be adapted and plugged to any source of data (CSV, SQL, MongoDB, Google Big Query...)
+and **"your own machine learning model"**
+
+You have now the **API** (fastApi) to list recommended products to your website.
+
 ## Project Overview
 
 This project aims to build a product recommendation system that predicts relevant products for users based on their 
