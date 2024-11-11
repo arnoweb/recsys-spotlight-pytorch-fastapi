@@ -81,5 +81,5 @@ Path of the model created
 
 ### To Come!!
 
-- API for the Rec Sys
+- Improve API for the Rec Sys
 - Use of a Vector Database instead of a static Pytorch model
