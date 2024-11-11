@@ -4,7 +4,7 @@ on:
   push:
     branches:
       # only deploy from the main branch
-      - master
+      - main
 
 jobs:
   deploy-to-ploomber-cloud:
@@ -29,4 +29,4 @@ jobs:
           ploomber-cloud deploy --watch-incremental
         # The --watch-incremental flag will print deployment status and deployment
         # log updates to the GitHub logs.
-        # To learn more, visit: https://docs.cloud.ploomber.io/en/latest/user-guide/github.html
+        # To learn more, visit: https://docs.cloud.ploomber.io/en/latest/user-guide/github.html 
