@@ -1,2 +1,5 @@
 .idea/
 data/old/
+.DS_Store
+venv
+model/
