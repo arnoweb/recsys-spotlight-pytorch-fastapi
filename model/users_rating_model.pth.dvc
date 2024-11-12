@@ -1,0 +1,5 @@
+outs:
+- md5: a034555ae840a89839fdbd3ccd82842a
+  size: 505538
+  hash: md5
+  path: users_rating_model.pth
