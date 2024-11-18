@@ -8,7 +8,7 @@
 
 ## What is this project is for?
 
-![Rec Sys User Based](readmeAssets/ml-recsys-schema.png)
+![Rec Sys User Based](readmeAssets/ml-recsys-schema.jpg)
 
 Amazon has sales that are 20% to 30% higher thanks to their product recommendation system! 
 
@@ -45,6 +45,7 @@ recommendation models.
 - **Spotlight**: A recommendation library based on PyTorch, used to simplify building and training collaborative filtering models.
 - **FastAPI**: A high-performance API framework used to expose the recommendation model for external access.
 - **Solara**: A React-based framework for building a Web UI, allowing users to interact with the recommendation model and visualize results.
+- **DVC**: is an open-source tool for versioning datasets, managing machine learning models, and ensuring reproducibility with seamless Git integration.
 
 ## How to use the Recommendation System
 
