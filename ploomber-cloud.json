@@ -1,4 +1,7 @@
 {
     "id": "spring-pond-0782",
-    "type": "solara"
+    "type": "solara",
+    "ignore": [
+        "venv/"
+    ]
 }
