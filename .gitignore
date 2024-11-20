@@ -1,4 +1,6 @@
 .idea/
 data/old/
 .DS_Store
-venv
+venv/
+*.pyc
+__pycache__/
