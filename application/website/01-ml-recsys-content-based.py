@@ -285,11 +285,7 @@ def Page():
         ### Sans prise en compte des interactions utilisateurs
     """
     )
-    solara.Markdown(
-        f"""
-        #### Si l'utilisateur est sur l'oeuvre *{work_default_title}*
-    """
-    )
+
     # Get recommendations for a work
     rec_df_search = data[data['title'] == work_default_title]
     # solara.DataFrame(rec_df_search, items_per_page=5)
@@ -317,7 +313,7 @@ def Page():
 
     rec_df_from_select = content_recommender(sv, df=data, with_score=False)
 
-    solara.Markdown(f"####Les recommandations pour l'oeuvre sélectionnée : *{select_default_shows.value}*")
+    solara.Markdown(f"####Si l'utilisateur se rend sur le Produit *{select_default_shows.value}* alors il aura les recommandations proposées suivantes:")
 
     with solara.Row(gap="10px", justify="space-around"):
 
