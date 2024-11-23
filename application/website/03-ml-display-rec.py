@@ -55,7 +55,7 @@ def Page():
     ############################################################################
     ## Check of torch model file
     ############################################################################
-    current_dir = os.getcwd()
+    current_dir = os.getcwd() + '/model/'
     relative_path_model = DATA_WORK + '_users_rating_model.pth'
     model_path = os.path.join(current_dir, relative_path_model)
 

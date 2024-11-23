@@ -1,7 +1,10 @@
 {
-    "id": "fancy-cell-0357",
-    "type": "solara",
-    "ignore": [
-        "venv/"
-        ]
+    "id": "cold-recipe-5844",
+    "type": "docker",
+        "ignore": [
+        "venv/",
+        "model/movies_users_rating_model.pth",
+        "model/users_rating_model.pth",
+        "vercel.json"
+    ]
 }

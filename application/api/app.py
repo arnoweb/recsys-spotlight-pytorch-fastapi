@@ -16,7 +16,7 @@ import torch
 import json
 import uvicorn
 
-sys.path.append('/Users/a.breton/digital_projects/machine-learning/rec-shows-spotlight-fastapi/application/utils')
+sys.path.append(os.path.join(os.getcwd(), 'application/utils'))
 from exploreData import *
 from modelData import *
 
@@ -51,15 +51,15 @@ tags_metadata = [
     },
     {
         "name": "getRecContent",
-        "description": "Get a list of recommandated shows based on similar features of products - Content-based Filtering",
+        "description": "Get a list of recommendated shows based on similar features of products - Content-based Filtering",
     },
     {
         "name": "getRecCollaborative",
-        "description": "Get a list of recommandated shows for a user based on others users ratings/purchase - User-based Collaborative Filtering",
+        "description": "Get a list of recommendated shows for a user based on others users ratings/purchase - User-based Collaborative Filtering",
     },
 ]
 
-app = FastAPI(title="ML API - Predict Rec Products", description="Get predicted recommandated products", version="0.0.1", openapi_tags=tags_metadata)
+app = FastAPI(title="ML API - Predict Rec Products", description="Get predicted recommendated products", version="0.0.1", openapi_tags=tags_metadata)
 
 
 class Item(BaseModel):

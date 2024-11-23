@@ -81,7 +81,7 @@ def Page():
     ############################################################################
     ## Vérification existance du model torch
     ############################################################################
-    current_dir = os.getcwd()
+    current_dir = os.getcwd() + '/model/'
     relative_path_model = DATA_WORK + '_users_rating_model.pth'
     model_path = os.path.join(current_dir, relative_path_model)
     #model_path = '/Users/a.breton/digital_projects/machine-learning/recsys-spotlight-pytorch-fastapi/model/' + DATA_WORK + '_users_rating_model.pth'
