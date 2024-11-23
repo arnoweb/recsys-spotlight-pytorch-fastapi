@@ -12,15 +12,20 @@ import sys
 import os
 import uvicorn
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+relative_path_utils = "../utils"
+absolute_path_utils = os.path.abspath(os.path.join(current_dir, relative_path_utils))
+sys.path.insert(0, absolute_path_utils)
 
-current_dir = os.getcwd()
-utils_path = os.path.abspath(os.path.join(current_dir, '../utils'))
-sys.path.append(utils_path)
-#print(utils_path)
 #print(sys.path)
 
 from exploreData import *
 from modelData import *
+
+#Stopwords dir
+stopwords_relative_path = '../../data/stopwords'
+stopwords_dir = os.path.abspath(os.path.join(current_dir, stopwords_relative_path))
+
 
 #class ItemType(str, Enum):
 #    type1 = "Content"

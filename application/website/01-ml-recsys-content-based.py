@@ -2,7 +2,12 @@ import sys
 import os
 from pathlib import Path
 
-sys.path.append(os.path.join(os.getcwd(), 'application/utils'))
+#sys.path.append(os.path.join(os.getcwd(), 'application/utils'))
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+relative_path_utils = "../utils"
+absolute_path_utils = os.path.abspath(os.path.join(current_dir, relative_path_utils))
+sys.path.insert(0, absolute_path_utils)
 
 from tools import *
 from exploreData import *
