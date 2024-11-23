@@ -1,6 +1,8 @@
 .idea/
 data/old/
+data/stopwords/
 .DS_Store
 venv/
 *.pyc
 __pycache__/
+.vercel

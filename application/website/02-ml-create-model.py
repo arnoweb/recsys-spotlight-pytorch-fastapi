@@ -1,5 +1,6 @@
 import sys
 import os
+import subprocess
 
 sys.path.append(os.path.join(os.getcwd(), 'application/utils'))
 from exploreData import *
@@ -167,10 +168,19 @@ def Page():
         torch.save(users_rating_model, model_path)
 
     else:
+
+        try:
+         # Pull model from DVC
+            dvc_result = subprocess.run(["dvc", "pull", "model/movies_users_rating_model.pth"], check=True)
+            process_msg = f"OK"
+        except subprocess.CalledProcessError as e:
+            process_msg = f"Default Machine Learning model load failed with error:{e}"
+        except FileNotFoundError as e:
+            process_msg = f"Default Machine Learning model load failed with:{e}"
+
         solara.Markdown(
             f"""
-            ### Spotlight model has been created or already exists at path:
-            {model_path}
+            ### Default Machine Learning model has been loaded via DVC (Google Drive) and has not been built during that step: {process_msg}
         """
         )
 

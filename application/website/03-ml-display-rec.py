@@ -113,6 +113,7 @@ def Page():
 
                     solara.Image(image_url)
     else:
+
         solara.Markdown(
             f"""
             # Please, create the Machine Learning Model first
