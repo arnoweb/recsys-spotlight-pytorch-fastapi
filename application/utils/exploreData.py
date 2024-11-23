@@ -8,10 +8,23 @@ import solara
 
 import numpy as np
 import pandas as pd
-from nltk.corpus import stopwords
 
 # Get the current working directory
 current_dir = os.getcwd()
+stopwords_dir = current_dir + '/data/stopwords'
+
+import nltk
+nltk.download('stopwords', download_dir=stopwords_dir)
+# Construct the path to the French stopwords file
+stopwords_french_path = os.path.join(stopwords_dir, 'corpora', 'stopwords', 'french')
+
+# Load French stopwords manually
+with open(stopwords_french_path, 'r', encoding='utf-8') as file:
+    stopwords_french = [line.strip() for line in file]
+
+#from nltk.corpus import stopwords
+
+
 
 ######## SHOWS
 relative_path_shows_items = "data/shows-23-24-items.csv"
@@ -209,8 +222,6 @@ def get_data_with_score(data, data_items_merge):
 
 @solara.component
 def exploreData():
-    # Define nltk stopwords in french
-    stopwords_french = stopwords.words('french')
 
     data = get_data(product_id=None, count=None)
     display_data(data)

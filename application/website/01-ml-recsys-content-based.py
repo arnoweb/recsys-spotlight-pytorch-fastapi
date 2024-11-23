@@ -14,7 +14,17 @@ import numpy as np
 import pandas as pd
 
 from collections import Counter
-from nltk.corpus import stopwords
+import nltk
+nltk.download('stopwords', download_dir=stopwords_dir)
+# Construct the path to the French stopwords file
+stopwords_french_path = os.path.join(stopwords_dir, 'corpora', 'stopwords', 'french')
+
+# Load French stopwords manually
+with open(stopwords_french_path, 'r', encoding='utf-8') as file:
+    stopwords_french = [line.strip() for line in file]
+
+#from nltk.corpus import stopwords
+
 from wordcloud import WordCloud, STOPWORDS
 
 # Declare reactive variables at the top level. Components using these variables
@@ -51,7 +61,7 @@ def Page():
     )
 
     # Define nltk stopwords in french
-    stopwords_french = stopwords.words('french')
+    #stopwords_french = stopwords.words('french')
 
     # Dataframe of items
     data = get_data(product_id=None, count=None)
@@ -195,7 +205,7 @@ def Page():
     # Import CountVectorizer
     from sklearn.feature_extraction.text import CountVectorizer
 
-    # Define a CV Vectorizer Object. Remove all english stopwords
+    # Define a CV Vectorizer Object. Remove all french stopwords
     cv = CountVectorizer(stop_words=stopwords_french)
 
     # Construct the required CV matrix by applying the fit_transform method on the overview feature
@@ -207,7 +217,7 @@ def Page():
     # Import TfIdfVectorizer from the scikit-learn library
     from sklearn.feature_extraction.text import TfidfVectorizer
 
-    # Define a TF-IDF Vectorizer Object. Remove all english stopwords
+    # Define a TF-IDF Vectorizer Object. Remove all french stopwords
     tfidf = TfidfVectorizer(stop_words=stopwords_french)
 
     # Construct the required TF-IDF matrix by applying the fit_transform method on the overview feature
