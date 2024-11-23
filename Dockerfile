@@ -13,8 +13,8 @@ WORKDIR /srv
 COPY requirements.txt /srv/
 RUN pip install -r requirements.txt --no-cache-dir
 
-RUN dvc pull model/movies_users_rating_model.pth
-
 COPY . /srv
+
+RUN dvc pull model/movies_users_rating_model.pth
 
 CMD ["solara", "run", "app.py", "--port=80", "--host=0.0.0.0", "--production" ]
