@@ -2,7 +2,9 @@ import sys
 import os
 import subprocess
 
-sys.path.append(os.path.join(os.getcwd(), 'application/utils'))
+current_dir = os.getcwd()
+utils_path = os.path.abspath(os.path.join(current_dir, '../utils'))
+sys.path.append(utils_path)
 from exploreData import *
 from modelData import *
 

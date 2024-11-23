@@ -55,6 +55,7 @@ dvc-studio-client==0.21.0
 dvc-task==0.40.2
 entrypoints==0.4
 executing==2.1.0
+fastapi==0.115.5
 fastjsonschema==2.20.0
 filelock==3.16.1
 flatten-dict==0.4.2
@@ -211,7 +212,7 @@ terminado==0.18.1
 threadpoolctl==3.5.0
 tinycss2==1.4.0
 tomlkit==0.13.2
-#torch==2.5.1
+torch==2.5.1
 tornado==6.4.1
 tqdm==4.67.0
 traitlets==5.14.3

@@ -10,13 +10,15 @@ from enum import Enum
 
 import sys
 import os
-
-import torch
-
-import json
 import uvicorn
 
-sys.path.append(os.path.join(os.getcwd(), 'application/utils'))
+
+current_dir = os.getcwd()
+utils_path = os.path.abspath(os.path.join(current_dir, '../utils'))
+sys.path.append(utils_path)
+#print(utils_path)
+#print(sys.path)
+
 from exploreData import *
 from modelData import *
 
@@ -154,4 +156,4 @@ app.add_middleware(
 )
 
 if __name__ == "__main__":
-    uvicorn.run('app:app', host='0.0.0.0', port=8000)
+    uvicorn.run('app:app', host='0.0.0.0', port=8765)

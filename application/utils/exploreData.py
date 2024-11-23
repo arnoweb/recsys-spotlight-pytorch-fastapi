@@ -9,9 +9,12 @@ import solara
 import numpy as np
 import pandas as pd
 
-# Get the current working directory
-current_dir = os.getcwd()
-stopwords_dir = current_dir + '/data/stopwords'
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+#Stopwords dir
+stopwords_relative_path = '../../data/stopwords'
+stopwords_dir = os.path.abspath(os.path.join(current_dir, stopwords_relative_path))
+
 
 import nltk
 nltk.download('stopwords', download_dir=stopwords_dir)
@@ -27,36 +30,38 @@ with open(stopwords_french_path, 'r', encoding='utf-8') as file:
 
 
 ######## SHOWS
-relative_path_shows_items = "data/shows-23-24-items.csv"
-absolute_path_shows_items = os.path.join(current_dir, relative_path_shows_items)
+relative_path_shows_items = "../../data/shows-23-24-items.csv"
+absolute_path_shows_items = os.path.abspath(os.path.join(current_dir, relative_path_shows_items))
 
-relative_path_shows_users = "data/shows-23-24-users.csv"
-absolute_path_shows_users = os.path.join(current_dir, relative_path_shows_users)
+relative_path_shows_users = "../../data/shows-23-24-users.csv"
+absolute_path_shows_users = os.path.abspath(os.path.join(current_dir, relative_path_shows_users))
 
-relative_path_shows_purchases = "data/shows-23-24-purchase.csv"
-absolute_path_shows_purchases = os.path.join(current_dir, relative_path_shows_purchases)
+relative_path_shows_purchases = "../../data/shows-23-24-purchase.csv"
+absolute_path_shows_purchases = os.path.abspath(os.path.join(current_dir, relative_path_shows_purchases))
 
-relative_path_shows_users_items_views = "data/shows-23-24-users-items-views.csv"
-absolute_path_shows_users_items_views = os.path.join(current_dir, relative_path_shows_users_items_views)
+relative_path_shows_users_items_views = "../../data/shows-23-24-users-items-views.csv"
+absolute_path_shows_users_items_views = os.path.abspath(os.path.join(current_dir, relative_path_shows_users_items_views))
 
 ######## MOVIES
-relative_path_movies_items = "data/movies_clean.csv"
-absolute_path_movies_items = os.path.join(current_dir, relative_path_movies_items)
+relative_path_movies_items = "../../data/movies_clean.csv"
+absolute_path_movies_items = os.path.abspath(os.path.join(current_dir, relative_path_movies_items))
 
-relative_path_movies_users = "data/movies_users.csv"
-absolute_path_movies_users = os.path.join(current_dir, relative_path_movies_users)
+print("absolute_path_movies_items==>",absolute_path_movies_items)
 
-relative_path_movies_users_purchases = "data/movies_users_purchases.csv"
-absolute_path_movies_users_purchases = os.path.join(current_dir, relative_path_movies_users_purchases)
+relative_path_movies_users = "../../data/movies_users.csv"
+absolute_path_movies_users = os.path.abspath(os.path.join(current_dir, relative_path_movies_users))
 
-relative_path_movies_users_page_views = "data/movies_users_page_views.csv"
-absolute_path_movies_users_page_views = os.path.join(current_dir, relative_path_movies_users_page_views)
+relative_path_movies_users_purchases = "../../data/movies_users_purchases.csv"
+absolute_path_movies_users_purchases = os.path.abspath(os.path.join(current_dir, relative_path_movies_users_purchases))
 
-relative_path_movies_users_ratings = "data/movies_ratings.csv"
-absolute_path_movies_users_ratings = os.path.join(current_dir, relative_path_movies_users_ratings)
+relative_path_movies_users_page_views = "../../data/movies_users_page_views.csv"
+absolute_path_movies_users_page_views = os.path.abspath(os.path.join(current_dir, relative_path_movies_users_page_views))
 
-relative_path_movies_users_tags = "data/movies_tags.csv"
-absolute_path_movies_users_tags = os.path.join(current_dir, relative_path_movies_users_tags)
+relative_path_movies_users_ratings = "../../data/movies_ratings.csv"
+absolute_path_movies_users_ratings = os.path.abspath(os.path.join(current_dir, relative_path_movies_users_ratings))
+
+relative_path_movies_users_tags = "../../data/movies_tags.csv"
+absolute_path_movies_users_tags = os.path.abspath(os.path.join(current_dir, relative_path_movies_users_tags))
 
 
 def display_data(df):
