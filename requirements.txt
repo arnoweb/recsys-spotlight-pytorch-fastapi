@@ -201,7 +201,7 @@ solara==1.41.0
 solara-server==1.41.0
 solara-ui==1.41.0
 soupsieve==2.6
-spotlight @ git+https://github.com/maciejkula/spotlight.git@75f4c8c55090771b52b88ef1a00f75bb39f9f2a9
+#spotlight @ git+https://github.com/maciejkula/spotlight.git@75f4c8c55090771b52b88ef1a00f75bb39f9f2a9
 sqltrie==0.11.1
 stack-data==0.6.3
 starlette==0.41.2

@@ -20,7 +20,7 @@ RUN python -m venv /venvs/recsys-api
 # you might modify it to install another version
 RUN /venvs/recsys-explore/bin/pip install --upgrade pip setuptools wheel
 RUN /venvs/recsys-explore/bin/pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
-#RUN /venvs/recsys-explore/bin/pip install --no-cache-dir -v git+https://github.com/maciejkula/spotlight.git
+RUN /venvs/recsys-explore/bin/pip install --no-cache-dir -v git+https://github.com/maciejkula/spotlight.git
 
 
 WORKDIR /srv
