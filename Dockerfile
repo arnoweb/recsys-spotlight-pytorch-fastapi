@@ -10,6 +10,7 @@ RUN apt update && apt install git supervisor nginx -y
 
 #RUN apt-get install git -y
 
+RUN python -m pip install --upgrade pip setuptools wheel
 RUN python -m venv /venvs/recsys-explore
 RUN python -m venv /venvs/recsys-api
 
