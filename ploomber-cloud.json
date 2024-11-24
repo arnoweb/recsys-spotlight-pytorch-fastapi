@@ -5,6 +5,7 @@
         "venv/",
         "model/movies_users_rating_model.pth",
         "model/users_rating_model.pth",
-        "vercel.json"
+        "readmeAssets/",
+        "README.md"
     ]
 }
