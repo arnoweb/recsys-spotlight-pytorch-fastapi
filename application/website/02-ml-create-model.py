@@ -53,10 +53,10 @@ def Page():
     data = get_data(product_id = None, count = None)
     display_data(data)
 
-    data_users = get_data_users()
+    data_users = get_data_users(user_id = None, count = None)
     display_data(data_users)
 
-    data_purchase = get_data_purchase()
+    data_purchase = get_data_users_purchases(user_id = None, count = None)
     display_data(data_purchase)
 
     print(DATA_WORK)
@@ -64,7 +64,7 @@ def Page():
     if DATA_WORK == 'shows':
         data_ratings = get_data_ratings(data_purchase)
     elif DATA_WORK == 'movies':
-        data_ratings = get_data_users_ratings()
+        data_ratings = get_data_users_ratings(user_id = None, count = None)
     else:
         data_ratings = get_data_ratings(data_purchase)
 

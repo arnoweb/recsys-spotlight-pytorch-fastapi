@@ -109,7 +109,7 @@ def Page():
         ## Les achats des oeuvres par utilisateur (fictif)
     """
     )
-    data_purchase = get_data_purchase()
+    data_purchase = get_data_users_purchases(user_id = None, count = None)
     solara.DataFrame(data_purchase, items_per_page=5)
 
     solara.Markdown(
@@ -118,7 +118,7 @@ def Page():
     """
     )
 
-    data_views = get_data_views()
+    data_views = get_data_users_page_views(user_id = None, count = None)
     solara.DataFrame(data_views, items_per_page=5)
 
     solara.Markdown(
@@ -127,7 +127,7 @@ def Page():
     """
     )
 
-    data_users = get_data_users()
+    data_users = get_data_users(user_id = None, count = None)
     solara.DataFrame(data_users, items_per_page=5)
 
     solara.Markdown(

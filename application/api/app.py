@@ -49,25 +49,36 @@ tags_metadata = [
         "description": "List of users ratings",
     },
     {
-        "name": "createModel",
-        "description": "Create the model based on data and ML with Spotlight implicit features",
+        "name": "getUsersPageViews",
+        "description": "List of users page views",
+    },
+    {
+        "name": "getUsersTags",
+        "description": "List of users tags on works",
+    },
+    {
+        "name": "generateModel",
+        "description": "Create the Machine Learning Model based on ratings of the users. Be patient, it takes time...",
     },
     {
         "name": "getModel",
-        "description": "Operations with users. The **login** logic is also here.",
+        "description": "Get the Machine Learning Model based on ratings of the users - Collaborative Filtering Model",
     },
     {
         "name": "getRecContent",
-        "description": "Get a list of recommendated shows based on similar features of products - Content-based Filtering",
+        "description": "Get a list of recommendated works based on similar features of products - Content-based Filtering",
     },
     {
         "name": "getRecCollaborative",
-        "description": "Get a list of recommendated shows for a user based on others users ratings/purchase - User-based Collaborative Filtering",
+        "description": "Get a list of recommendated works for a user based on others users ratings/purchase - User-based Collaborative Filtering",
     },
 ]
 
 app = FastAPI(title="ML API - Predict Rec Products", description="Get predicted recommendated products", version="0.0.1", openapi_tags=tags_metadata)
 
+class typeOfDataWork(str, Enum):
+    value1 = "movies"
+    value2 = "shows"
 
 class Item(BaseModel):
     count: int = Field(default='3')
@@ -92,21 +103,58 @@ async def getUsers(user_id: Optional[int] = None, count: Optional[int] = None):
     return data
 
 @app.get("/usersPurchases", tags=["getUsersPurchases"])
-async def getUsersPurchases():
+async def getUsersPurchases(user_id: Optional[int] = None, count: Optional[int] = None):
     # List of users purchases
-    data = get_data_users_purchases().to_json(orient='records')
+    data = get_data_users_purchases(user_id, count).to_json(orient='records')
     return data
 
 @app.get("/usersRatings", tags=["getUsersRatings"])
-async def usersRatings():
+async def usersRatings(user_id: Optional[int] = None, count: Optional[int] = None):
     # List of users purchases
-    data = get_data_users-ratings().to_json(orient='records')
+    data = get_data_users_ratings(user_id, count).to_json(orient='records')
     return data
 
-@app.get("/createModel", tags=["createModel"])
-def create_model(request: Request):
+@app.get("/usersPageViews", tags=["getUsersPageViews"])
+async def usersPageViews(user_id: Optional[int] = None, count: Optional[int] = None):
+    # List of users purchases
+    data = get_data_users_page_views(user_id, count).to_json(orient='records')
+    return data
 
-    return
+@app.get("/usersTags", tags=["getUsersTags"])
+async def usersTags(user_id: Optional[int] = None, count: Optional[int] = None):
+    # List of users purchases
+    data = get_data_users_tags(user_id, count).to_json(orient='records')
+    return data
+
+@app.get("/generateModel", tags=["generateModel"])
+async def generate_model(data_work_type:typeOfDataWork):
+
+    if data_work_type == 'shows':
+        data_purchase = get_data_users_purchases(user_id=None, count=None)
+        data_ratings = get_data_ratings(data_purchase)
+    elif data_work_type == 'movies':
+        data_purchase = get_data_users_purchases(user_id=None, count=None)
+        data_ratings = get_data_users_ratings(user_id = None, count = None)
+    else:
+        data_purchase = get_data_users_purchases(user_id=None, count=None)
+        data_ratings = get_data_ratings(data_purchase)
+
+    #create dataset interaction with Spotlight
+    dataset = create_dataset_interactions(data_ratings)
+
+    #get best iteration - best score - patience...it takes time
+    best_iteration_number = get_best_iteration_for_model(dataset)
+
+    #create of the model
+    users_rating_train, users_rating_test, users_rating_model = create_model(dataset, type="explicit",
+                                                                             test_percentage=0.2,
+                                                                             n_iter=best_iteration_number,
+                                                                             with_model_fit=1)
+
+    #save the model
+    df_message = save_model(users_rating_model,data_work_type)
+
+    return df_message
 
 @app.get("/getModel", tags=["getModel"])
 def get_model(request: Request):
@@ -114,39 +162,33 @@ def get_model(request: Request):
     return
 
 @app.get("/getRec/content/{product_id}/{count}", tags=["getRecContent"])
-async def get_rec_content(product_id: int, count: int):
+async def get_rec_content(data_work_type:typeOfDataWork, product_id: int, count: int):
     try:
-        # Rec type
-        rec_type = 'content'
+        # List of works
+        data_works = get_data(product_id=None, count=None)
 
-        # List of shows
-        data_shows = get_data()
-
-        predictOutput = predict_items_from_user_api(rec_type, data_shows, data_purchases, user_id, count)
+        predictOutput = predict_items_from_user_api(data_works, data_purchases, user_id, count)
 
         return predictOutput
 
     except Exception as error:
         return {'error': error}
 
-@app.get("/getRec/collaborative/{user_id}/{count}", tags=["getRecCollaborative"])
-async def get_rec_collaborative(user_id: int, count: int):
-    try:
-        # Rec type
-        rec_type = 'collaborative'
+@app.get("/getRec/collaborative/{data_work_type}/{user_id}/{count}", tags=["getRecCollaborative"])
+async def get_rec_collaborative(data_work_type:typeOfDataWork, user_id: int, count: int):
+    #try:
+        # List of works
+        data_works = get_data(product_id=None, count=None)
 
-        # List of shows
-        data_shows = get_data()
+        # List of works purchased by users - exclusion of works products buy previously by the user - to not rec those to him
+        data_purchases = get_data_users_purchases(user_id=None, count=None)
 
-        # List of shows purchased by users
-        data_purchases = get_data_purchase()
-
-        predictOutput = predict_items_from_user_api(rec_type, data_shows, data_purchases, user_id, count)
+        predictOutput = predict_items_from_user_api(data_work_type, data_works, data_purchases, user_id, count)
 
         return predictOutput
 
-    except Exception as error:
-        return {'error': error}
+    #except Exception as error:
+    #    return {'error': error}
 
 
 

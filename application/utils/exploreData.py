@@ -60,7 +60,7 @@ absolute_path_movies_users_page_views = os.path.abspath(os.path.join(current_dir
 relative_path_movies_users_ratings = "../../data/movies_ratings.csv"
 absolute_path_movies_users_ratings = os.path.abspath(os.path.join(current_dir, relative_path_movies_users_ratings))
 
-relative_path_movies_users_tags = "../../data/movies_tags.csv"
+relative_path_movies_users_tags = "../../data/movies_users_tags.csv"
 absolute_path_movies_users_tags = os.path.abspath(os.path.join(current_dir, relative_path_movies_users_tags))
 
 
@@ -72,7 +72,7 @@ DATA_WORK = 'movies'
 
 if DATA_WORK == 'shows':
     def get_data(product_id, count):
-        #Dataframe of items
+
         data = pd.read_csv(absolute_path_shows_items)
         data = data[['work_id', 'title', 'description', 'genre_1', 'auteur', 'url']]
 
@@ -80,27 +80,72 @@ if DATA_WORK == 'shows':
             if (data['work_id'] == product_id).any():
                 data = data[data['work_id'] == product_id]
             else:
-                data_message = {
-                    'message_error': 'This product ID does not exist',
-                }
-                data = pd.DataFrame(data)
+                data_error = pd.DataFrame({
+                    "Error": [f"This product ID {product_id} does not exist"]
+                })
+                return data_error
 
         if count is not None:
             data = data.iloc[:count]
 
         return data
 
-    def get_data_users():
-        data_users = pd.read_csv(absolute_path_shows_users)
-        data_users['firstlastname_user'] = data_users['firstname_user'] + ' ' + data_users['lastname_user']
-        return data_users
+    def get_data_users(user_id, count):
 
-    def get_data_purchase():
-        data_purchase = pd.read_csv(absolute_path_shows_purchases)
-        return data_purchase
-    def get_data_views():
-        data_views = pd.read_csv(absolute_path_shows_users_items_views)
-        return data_views
+        data = pd.read_csv(absolute_path_shows_users)
+        data['user_firstlastname'] = data['user_firstname'] + ' ' + data['user_lastname']
+
+        if user_id is not None:
+            if (data['user_id'] == user_id).any():
+                data = data[data['user_id'] == user_id]
+            else:
+                data_error = pd.DataFrame({
+                    "Error": [f"This user ID {user_id} does not exist"]
+                })
+                return data_error
+
+        if count is not None:
+            data = data.iloc[:count]
+
+        return data
+
+    def get_data_users_purchases(user_id, count):
+
+        data = pd.read_csv(absolute_path_shows_purchases)
+
+        if user_id is not None:
+            if (data['user_id'] == user_id).any():
+                data = data[data['user_id'] == user_id]
+            else:
+                data_error = pd.DataFrame({
+                    "Error": [f"This user ID {user_id} does not have a purchase"]
+                })
+                return data_error
+
+        if count is not None:
+            data = data.iloc[:count]
+
+        return data
+
+
+    def get_data_users_page_views(user_id, count):
+
+        data = pd.read_csv(absolute_path_shows_users_items_views)
+
+        if user_id is not None:
+            if (data['user_id'] == user_id).any():
+                data = data[data['user_id'] == user_id]
+            else:
+                data_error = pd.DataFrame({
+                    "Error": [f"This user ID {user_id} does not have a page view"]
+                })
+                return data_error
+
+        if count is not None:
+            data = data.iloc[:count]
+
+        return data
+
 
     def get_work_default():
         return 'Lohengrin'
@@ -108,7 +153,7 @@ if DATA_WORK == 'shows':
 elif DATA_WORK == 'movies':
 
     def get_data(product_id, count):
-        # Dataframe of items
+
         data = pd.read_csv(absolute_path_movies_items)
         data = data[['work_id', 'title', 'description', 'genre_1', 'auteur', 'year', 'url']]
         data['work_id'] = data['work_id'].astype(int)
@@ -117,36 +162,109 @@ elif DATA_WORK == 'movies':
             if (data['work_id'] == product_id).any():
                 data = data[data['work_id'] == product_id]
             else:
-                data_message = {
-                    'message_error': 'This product ID does not exist',
-                }
-                data = pd.DataFrame(data)
+                data_error = pd.DataFrame({
+                    "Error": [f"This product ID {product_id} does not exist"]
+                })
+                return data_error
 
         if count is not None:
             data = data.iloc[:count]
 
         return data
 
-    def get_data_users():
-        data_users = pd.read_csv(absolute_path_movies_users)
-        data_users['user_firstlastname'] = data_users['user_firstname'] + ' ' + data_users['user_lastname']
-        return data_users
+    def get_data_users(user_id, count):
 
-    def get_data_purchase():
-        data_purchase = pd.read_csv(absolute_path_movies_users_purchases)
-        return data_purchase
+        data = pd.read_csv(absolute_path_movies_users)
+        data['user_firstlastname'] = data['user_firstname'] + ' ' + data['user_lastname']
 
-    def get_data_views():
-        data_views = pd.read_csv(absolute_path_movies_users_page_views)
-        return data_views
+        if user_id is not None:
+            if (data['user_id'] == user_id).any():
+                data = data[data['user_id'] == user_id]
+            else:
+                data_error = pd.DataFrame({
+                    "Error": [f"This user ID {user_id} does not exist"]
+                })
+                return data_error
 
-    def get_data_users_ratings():
-        data_users_ratings = pd.read_csv(absolute_path_movies_users_ratings)
-        return data_users_ratings
+        if count is not None:
+            data = data.iloc[:count]
 
-    def get_data_users_tags():
-        data_users_tags = pd.read_csv(absolute_path_movies_users_tags)
-        return data_users_tags
+        return data
+
+    def get_data_users_purchases(user_id, count):
+
+        data = pd.read_csv(absolute_path_movies_users_purchases)
+
+        if user_id is not None:
+            if (data['user_id'] == user_id).any():
+                data = data[data['user_id'] == user_id]
+            else:
+                data_error = pd.DataFrame({
+                    "Error": [f"This user ID {user_id} does not have a purchase"]
+                })
+                return data_error
+
+        if count is not None:
+            data = data.iloc[:count]
+
+        return data
+
+    def get_data_users_page_views(user_id, count):
+
+        data = pd.read_csv(absolute_path_movies_users_page_views)
+
+        if user_id is not None:
+            if (data['user_id'] == user_id).any():
+                data = data[data['user_id'] == user_id]
+            else:
+                data_error = pd.DataFrame({
+                    "Error": [f"This user ID {user_id} does not have a page view"]
+                })
+                return data_error
+
+        if count is not None:
+            data = data.iloc[:count]
+
+        return data
+
+
+    def get_data_users_ratings(user_id, count):
+
+        data = pd.read_csv(absolute_path_movies_users_ratings)
+
+        if user_id is not None:
+            if (data['user_id'] == user_id).any():
+                data = data[data['user_id'] == user_id]
+            else:
+                data_error = pd.DataFrame({
+                    "Error": [f"This user ID {user_id} does not have a rating"]
+                })
+                return data_error
+
+        if count is not None:
+            data = data.iloc[:count]
+
+        return data
+
+
+    def get_data_users_tags(user_id, count):
+
+        data = pd.read_csv(absolute_path_movies_users_tags)
+
+        if user_id is not None:
+            if (data['user_id'] == user_id).any():
+                data = data[data['user_id'] == user_id]
+            else:
+                data_error = pd.DataFrame({
+                    "Error": [f"This user ID {user_id} does not have a tag"]
+                })
+                return data_error
+
+        if count is not None:
+            data = data.iloc[:count]
+
+        return data
+
 
     def get_work_default():
         #return 'Die Hard'
@@ -252,7 +370,7 @@ def exploreData():
     """
     )
 
-    data_purchase = get_data_purchase()
+    data_purchase = get_data_users_purchases(user_id=None, count=None)
     display_data(data_purchase)
 
     solara.Markdown(
@@ -261,7 +379,7 @@ def exploreData():
     """
     )
 
-    data_views = get_data_views()
+    data_views = get_data_users_page_views(user_id=None, count=None)
     display_data(data_views)
 
     solara.Markdown(
@@ -270,7 +388,7 @@ def exploreData():
     """
     )
 
-    data_users = get_data_users()
+    data_users = get_data_users(user_id=None, count=None)
     display_data(data_users)
 
 
