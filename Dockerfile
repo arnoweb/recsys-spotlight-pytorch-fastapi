@@ -5,7 +5,7 @@ RUN apt-get update && \
     supervisor nginx \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt install git -y
+RUN apt-get install git -y
 
 RUN python -m venv /venvs/recsys-explore
 RUN python -m venv /venvs/recsys-api
