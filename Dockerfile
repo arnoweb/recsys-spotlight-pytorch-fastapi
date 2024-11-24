@@ -1,11 +1,13 @@
-FROM --platform=linux/amd64 python:3.11-slim-bookworm
+FROM python:3.11-slim-bookworm
 
-RUN apt-get update && \
-    apt-get install -y \
-    supervisor nginx \
-    && rm -rf /var/lib/apt/lists/*
+#RUN apt-get update && \
+#    apt-get install -y \
+#    supervisor nginx \
+#    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install git -y
+RUN apt update && apt install git supervisor nginx -y
+
+#RUN apt-get install git -y
 
 RUN python -m venv /venvs/recsys-explore
 RUN python -m venv /venvs/recsys-api
