@@ -6,7 +6,7 @@ FROM python:3.11-slim-bookworm
 #    nginx \
 #    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN apt update && apt install git supervisor nginx -y
+RUN apt update && apt install git supervisor nginx build-essential python3-dev python3-pip python3-wheel python3-setuptools -y
 
 #RUN apt-get install git -y
 
@@ -19,6 +19,8 @@ RUN python -m venv /venvs/recsys-api
 # install the cpu-only torch (or any other torch-related packages)
 # you might modify it to install another version
 RUN /venvs/recsys-explore/bin/pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+RUN /venvs/recsys-explore/bin/pip install --no-cache-dir -v git+https://github.com/maciejkula/spotlight.git
+
 
 WORKDIR /srv
 COPY requirements.txt /srv/
