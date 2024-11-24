@@ -16,8 +16,9 @@ COPY requirements.txt /srv/
 # install the cpu-only torch (or any other torch-related packages)
 # you might modify it to install another version
 RUN /venvs/recsys-explore/bin/pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
-RUN /venvs/recsys-explore/bin/pip install -r /requirements.txt --no-cache-dir
-RUN /venvs/recsys-api/bin/pip install -r /requirements.txt --no-cache-dir
+
+RUN /venvs/recsys-explore/bin/pip install -r requirements.txt --no-cache-dir
+RUN /venvs/recsys-api/bin/pip install -r requirements.txt --no-cache-dir
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisord.conf
