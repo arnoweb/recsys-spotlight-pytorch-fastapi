@@ -1,20 +1,32 @@
-FROM python:3.11-slim-bookworm
+FROM --platform=linux/amd64 python:3.11-slim-bookworm
 
-RUN apt update && apt install git -y
-RUN pip install solara --no-cache-dir
-# install the cpu-only torch (or any other torch-related packages)
-# you might modify it to install another version
-RUN pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+RUN apt-get update && \
+    apt-get install -y \
+    git supervisor nginx \
+    && rm -rf /var/lib/apt/lists/*
 
-# any packages that depend on pytorch must be installed after the previous RUN command
+RUN python -m venv /venvs/recsys-explore
+RUN python -m venv /venvs/recsys-api
 
 WORKDIR /srv
-# Caching Introduced here
-COPY start.sh start.sh
+
 COPY requirements.txt /srv/
-RUN pip install -r requirements.txt --no-cache-dir
+
+#RUN /venvs/recsys-explore/bin/pip install solara --no-cache-dir
+# install the cpu-only torch (or any other torch-related packages)
+# you might modify it to install another version
+RUN /venvs/recsys-explore/bin/pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+RUN /venvs/recsys-explore/bin/pip install -r /requirements.txt --no-cache-dir
+RUN /venvs/recsys-api/bin/pip install -r /requirements.txt --no-cache-dir
+
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY supervisord.conf /etc/supervisord.conf
 
 COPY . /srv
 
-ENTRYPOINT ["sh", "start.sh", "--port", "80"]
+EXPOSE 80
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+
+#ENTRYPOINT ["sh", "start.sh", "--port", "80"]
 #CMD ["solara", "run", "app.py", "--port=80", "--host=0.0.0.0", "--production" ]
