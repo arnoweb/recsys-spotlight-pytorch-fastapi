@@ -10,7 +10,7 @@ RUN apt update && apt install git supervisor nginx build-essential python3-dev p
 
 #RUN apt-get install git -y
 
-RUN python -m pip install --upgrade pip setuptools wheel
+
 RUN python -m venv /venvs/recsys-explore
 RUN python -m venv /venvs/recsys-api
 
@@ -18,6 +18,7 @@ RUN python -m venv /venvs/recsys-api
 #RUN /venvs/recsys-explore/bin/pip install solara --no-cache-dir
 # install the cpu-only torch (or any other torch-related packages)
 # you might modify it to install another version
+RUN /venvs/recsys-explore/bin/pip install --upgrade pip setuptools wheel
 RUN /venvs/recsys-explore/bin/pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
 RUN /venvs/recsys-explore/bin/pip install --no-cache-dir -v git+https://github.com/maciejkula/spotlight.git
 
