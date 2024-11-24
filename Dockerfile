@@ -22,13 +22,14 @@ RUN /venvs/recsys-explore/bin/pip install --upgrade pip setuptools wheel
 RUN /venvs/recsys-explore/bin/pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
 RUN /venvs/recsys-explore/bin/pip install --no-cache-dir -v git+https://github.com/maciejkula/spotlight.git
 
+RUN /venvs/recsys-api/bin/pip install --upgrade pip setuptools wheel
+RUN /venvs/recsys-api/bin/pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+RUN /venvs/recsys-api/bin/pip install --no-cache-dir -v git+https://github.com/maciejkula/spotlight.git
 
 WORKDIR /srv
 COPY requirements.txt /srv/
 
 RUN /venvs/recsys-explore/bin/pip install -r requirements.txt --no-cache-dir
-
-RUN /venvs/recsys-api/bin/pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
 RUN /venvs/recsys-api/bin/pip install -r requirements.txt --no-cache-dir
 
 COPY nginx.conf /etc/nginx/nginx.conf
