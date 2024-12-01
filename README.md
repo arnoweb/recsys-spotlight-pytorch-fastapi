@@ -68,7 +68,12 @@ recommendation models.
 ![Rec Sys Content Based - Cold Start](readmeAssets/ml-recsys-coldstart.jpg)
 
 ### Create the Machine Learning Model - PyTorch Model
+
+Via Solara:  
 ```solara run application/website/02-ml-create-model.py```
+
+Or via API endpoint:  
+```/generateModel?data_work_type=movies```
 
 Path of the model created
 ```model/movies_users_rating_model.pth```
@@ -78,9 +83,18 @@ Path of the model created
 #### Based on the machine learning model - PyTorch Model
 ```solara run application/website/03-ml-display-rec.py```
 
+Or via API endpoint (e.g User ID:1 and recommended results up to 3):  
+```/getRec/collaborative/movies/1/3```
+
 ![Rec Sys User Based](readmeAssets/ml-recsys-users-ratings.jpg)
+
+### The recommended products API
+
+Test and doc of the API (FastAPI)  
+```http://127.0.0.1:8765/docs```
+
+![Rec Sys User Based](readmeAssets/ml-recsys-api-doc.jpg)
 
 ### To Come!!
 
-- Improve API for the Rec Sys
 - Use of a Vector Database instead of a static Pytorch model
