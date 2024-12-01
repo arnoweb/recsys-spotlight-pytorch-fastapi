@@ -161,6 +161,7 @@ def Page():
     #print(data.info())
     #print(data_items['work_id'].dtype)
 
+    ##todo: merge data_similarities instead of data below
     data_items_merge = data_items.merge(data, on='work_id', how='left')
 
     data_items_merge['rating_average'] = data_items_merge['rating_count'].apply(rating_to_allpurchases_of_movies)
@@ -287,11 +288,11 @@ def Page():
     )
 
     # Get recommendations for a work
-    rec_df_search = data[data['title'] == work_default_title]
+    # rec_df_search = data[data['title'] == work_default_title]
     # solara.DataFrame(rec_df_search, items_per_page=5)
 
     # Get recommendations for a work
-    rec_df = content_recommender(work_default_title, with_score=False)
+    # rec_df = content_recommender(work_default_title, with_score=False)
     # solara.DataFrame(rec_df, items_per_page=5)
 
     ############################################################################

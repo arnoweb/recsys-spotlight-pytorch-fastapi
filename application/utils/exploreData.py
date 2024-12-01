@@ -333,7 +333,7 @@ def get_data_item_score(data, data_ratings):
 def get_data_with_score(data, data_items_merge):
     data_with_score = data.merge(data_items_merge, on='work_id', how='left')
 
-    display_data(data_with_score)
+    #display_data(data_with_score)
 
     data_with_score = data_with_score[['work_id', 'title_x', 'description_x', 'genre_x', 'genre_improved_x',
                                        'auteur_x', 'url_x', 'genre_improved_multi_x', 'bag_of_words_x', 'score']]

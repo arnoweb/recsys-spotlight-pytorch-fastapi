@@ -1,3 +1,6 @@
+from apscheduler.schedulers.background import BackgroundScheduler
+from contextlib import asynccontextmanager
+import httpx
 from fastapi import FastAPI, Request, Form
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
@@ -11,6 +14,7 @@ from enum import Enum
 import sys
 import os
 import uvicorn
+
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 relative_path_utils = "../utils"
@@ -74,7 +78,29 @@ tags_metadata = [
     },
 ]
 
-app = FastAPI(title="ML API - Predict Rec Products", description="Get predicted recommendated products", version="0.0.1", openapi_tags=tags_metadata)
+# Function to call the endpoint
+def update_model():
+    with httpx.Client() as client:
+        response = client.get("http://127.0.0.1:8765/generateModel?data_work_type=movies")
+        print("Task executed with response:", response.json())
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Add the scheduler
+    scheduler = BackgroundScheduler()
+    ####CRON LIKE ######
+    scheduler.add_job(update_model, 'cron', minute='*/5')
+    scheduler.start()
+    print("Scheduler started for create ML model.")
+
+    yield
+
+    scheduler.shutdown()
+    print("Scheduler shutdown for create ML model.")
+
+
+app = FastAPI(lifespan=lifespan, title="ML API - Predict Rec Products", description="Get predicted recommendated products", version="0.0.1", openapi_tags=tags_metadata)
 
 class typeOfDataWork(str, Enum):
     value1 = "movies"
@@ -163,16 +189,33 @@ def get_model(request: Request):
 
 @app.get("/getRec/content/{product_id}/{count}", tags=["getRecContent"])
 async def get_rec_content(data_work_type:typeOfDataWork, product_id: int, count: int):
-    try:
+    #try:
         # List of works
         data_works = get_data(product_id=None, count=None)
+        # Get Work Title from the ID
+        title = data_works.loc[data_works['work_id'] == product_id, 'title'].iloc[0]
+        # create bags of words
+        data_similarities = get_data_similarities(data_works)
 
-        predictOutput = predict_items_from_user_api(data_works, data_purchases, user_id, count)
+        # List of purchases of works
+        # data_purchases = get_data_users_purchases(user_id=None, count=None)
+        # add ratings/weight regarding the purchases of the products
+        #data_with_ratings = add_ratings_from_purchases(data_works, data_purchases)
+        # add score to data
+        #rename_data_with_score = get_data_with_score(data_similarities, data_with_ratings)
 
-        return predictOutput
+        # create cosine similarities matrix
+        cosine_sim, indices = model_vectorization_cosine_similarities(data_works, data_similarities, stopwords_french, typeOfVec = "CountVec")
 
-    except Exception as error:
-        return {'error': error}
+        predictOutput = model_content_recommender(title, cosine_sim, data_works, indices, limit=4, with_score=False)
+
+        ## Transform to JSON
+        rec_df_rating_json = predictOutput.to_json(orient='records')
+
+        return rec_df_rating_json
+
+    #except Exception as error:
+    #    return {'error': error}
 
 @app.get("/getRec/collaborative/{data_work_type}/{user_id}/{count}", tags=["getRecCollaborative"])
 async def get_rec_collaborative(data_work_type:typeOfDataWork, user_id: int, count: int):
@@ -186,9 +229,6 @@ async def get_rec_collaborative(data_work_type:typeOfDataWork, user_id: int, cou
         predictOutput = predict_items_from_user_api(data_work_type, data_works, data_purchases, user_id, count)
 
         return predictOutput
-
-    #except Exception as error:
-    #    return {'error': error}
 
 
 
