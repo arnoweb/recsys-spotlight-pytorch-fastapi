@@ -1,4 +1,4 @@
-# Products Recommendation System - create your private A.I model and plug your website with the API
+# Products Recommendation System - create your private A.I model and use it on your website via the build-in API
 
 ![Python Version](https://img.shields.io/badge/python-3.11%2B-blue)
 ![PyTorch Version](https://img.shields.io/badge/pytorch-2.5.1%2B-lightgrey)
