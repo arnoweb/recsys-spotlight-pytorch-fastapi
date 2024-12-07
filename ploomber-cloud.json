@@ -1,11 +1,14 @@
 {
-    "id": "empty-flower-0451",
+    "id": "weathered-hat-2157",
     "type": "docker",
-    "ignore": [
-        "venv/",
-        "model/movies_users_rating_model.pth",
-        "model/users_rating_model.pth",
-        "readmeAssets/",
-        "README.md"
+        "ignore": [
+            "venv/",
+            ".dvc/",
+            ".cadence/",
+            ".idea/",
+            "model/movies_users_rating_model.pth",
+            "model/users_rating_model.pth",
+            "readmeAssets/",
+            "README.md"
     ]
 }
