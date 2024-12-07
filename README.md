@@ -2,6 +2,7 @@
 
 ![Python Version](https://img.shields.io/badge/python-3.11%2B-blue)
 ![PyTorch Version](https://img.shields.io/badge/pytorch-2.5.1%2B-lightgrey)
+![Pinecone Version](https://img.shields.io/badge/spotlight-6.0%2B-red)
 ![FastAPI Version](https://img.shields.io/badge/fastapi-0.115%2B-green)
 ![Solara Version](https://img.shields.io/badge/solara-1.41%2B-orange)
 ![Spotlight Version](https://img.shields.io/badge/spotlight-0.1.6%2B-red)
@@ -43,6 +44,7 @@ recommendation models.
 - **Python**: Core language for model development, API, and backend logic.
 - **PyTorch**: Used as the backbone framework for building and training the recommendation model.
 - **Spotlight**: A recommendation library based on PyTorch, used to simplify building and training collaborative filtering models.
+- **Pinecone**: Used to create embeddings of data, indexing vector data and request vector data
 - **FastAPI**: A high-performance API framework used to expose the recommendation model for external access.
 - **Solara**: A React-based framework for building a Web UI, allowing users to interact with the recommendation model and visualize results.
 - **DVC**: is an open-source tool for versioning datasets, managing machine learning models, and ensuring reproducibility with seamless Git integration.
@@ -95,6 +97,3 @@ Test and doc of the API (FastAPI)
 
 ![Rec Sys User Based](readmeAssets/ml-recsys-api-doc.jpg)
 
-### To Come!!
-
-- Use of a Vector Database instead of a static Pytorch model

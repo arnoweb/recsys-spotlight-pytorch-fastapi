@@ -6,15 +6,23 @@ from spotlight.factorization.implicit import ImplicitFactorizationModel
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from pinecone import Pinecone, ServerlessSpec
+from sentence_transformers import SentenceTransformer
+from dotenv import load_dotenv
 from datetime import datetime
+import torch
 import numpy as np
 import pandas as pd
 import subprocess
+import time
+
 
 import sys
 import os
 
 import torch
+
+from application.utils.exploreData import DATA_WORK
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -343,9 +351,121 @@ def model_content_recommender(title, cosine_sim, df, indices, limit=4,
     return rec
 
 
+def model_vector_db_init():
+
+    load_dotenv()
+    pinecone_api_key = os.getenv("PINECONE_API_KEY")
+
+    pc = Pinecone(api_key=pinecone_api_key)
+
+    return pc
+
+def model_vector_create_index():
+
+    pc = model_vector_db_init()
+
+    index_name = DATA_WORK
+
+    if not pc.has_index(index_name):
+        pc.create_index(
+            name=index_name,
+            dimension=384,
+            metric="dotproduct",
+            spec=ServerlessSpec(
+                cloud='aws',
+                region='us-east-1'
+            )
+        )
+
+        # Wait for the index to be ready
+    while not pc.describe_index(index_name).status['ready']:
+        time.sleep(1)
+
+    # Select Index
+    index = pc.Index(index_name)
+    return index
+
+def model_vector_getModel():
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    model = SentenceTransformer('sentence-transformers/all-MiniLM-L12-v2').to(device)
+    return model
+
+def model_generate_embeddings(data_similarities):
+
+    model = model_vector_getModel()
+
+    sentences = [x["bag_of_words"] for x in data_similarities]
+    embeddings = model.encode(sentences)
+
+    print("embeddings shape: ", embeddings.shape)
+
+    return model, embeddings
 
 
+def model_vector_indexing(data_works, data_similarities_prepared_for_vectors):
+
+    # Select Index
+    index = model_vector_create_index()
+
+    # Create embeddings
+    model, embeddings = model_generate_embeddings(data_similarities_prepared_for_vectors)
+
+    vectors = []
+    for ds, dv, e in zip(data_works, data_similarities_prepared_for_vectors, embeddings):
+        vectors.append({
+            "id": dv['id'],
+            "values": e,
+            "metadata": {
+                "title": ds["title"],
+                "description": ds["description"],
+                "genre": ds["genre_1"],
+                "auteur": ds["auteur"],
+                "year": ds["year"]
+            }
+        })
+
+    index.upsert(
+        vectors=vectors,
+        namespace="recsys_movies"
+    )
+
+    time.sleep(10)  # Wait for the upserted vectors to be indexed
+
+    index_info = index.describe_index_stats()
+    print(index_info)
+    total_vectors = index_info.get('total_vector_count')
+    print(total_vectors)
+
+    return index, model, total_vectors
 
 
+def model_content_recommender_vectors(data_works, data_similarities, title, count):
 
+    # Select Index
+    index = model_vector_create_index()
 
+    # Get Model
+    model = model_vector_getModel()
+
+    #index, model = model_vector_indexing(data_works, data_similarities)
+
+    query = title
+
+    query_embedding = model.encode(query).tolist()
+    #print(query_embedding)
+
+    results = index.query(
+        namespace="recsys_movies",
+        vector=query_embedding,
+        top_k=count,
+        include_values=False,
+        include_metadata=True,
+        filter={"title": {"$ne": title}}
+    )
+
+    filtered_results = [
+        {"work_id": match["id"], "title": match["metadata"]["title"]}
+        for match in results["matches"]
+    ]
+
+    return filtered_results

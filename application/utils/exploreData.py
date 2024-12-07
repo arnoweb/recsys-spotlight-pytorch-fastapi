@@ -282,14 +282,21 @@ def get_data_similarities(data):
     pd.set_option('display.max_colwidth', None)
 
     # To improve model, add bag_of_words with auteur genre or venue repeating to give more weight
-    data['genre_improved_multi'] = data['genre_1'].apply(lambda x: repeat_word(x, 3))
+    data['genre_improved_multi'] = data['genre_1'].apply(lambda x: repeat_word(x, 2))
     data['genre_improved_multi'] = data['genre_improved_multi'].apply(lambda x: ' '.join(map(str, x)))
     data.insert(4, 'genre_improved', data['genre_improved_multi'])
 
-    # Create a bag of words composed with different features
-    data['bag_of_words'] = data[data.columns[1:6]].apply(lambda x: ' '.join(x), axis=1)
     # Clean HTML of bag of words
-    data['bag_of_words'] = data['bag_of_words'].apply(lambda x: cleanHTML(x))
+    data[data.columns[1:6]] = data[data.columns[1:6]].applymap(cleanHTML)
+
+    # Create a bag of words composed with different features
+    data['bag_of_words'] = (
+             data[data.columns[1:6]].astype(str).apply(lambda x: ' '.join(x), axis=1)
+            + ' ' + data['year'].astype(int).astype(str)
+    )
+
+    # Clean HTML of bag of words
+    #data['bag_of_words'] = data['bag_of_words'].apply(lambda x: cleanHTML(x))
 
     return data
 

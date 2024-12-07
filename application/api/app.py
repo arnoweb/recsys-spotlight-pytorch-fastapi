@@ -5,6 +5,7 @@ from fastapi import FastAPI, Request, Form
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from fastapi.templating import Jinja2Templates
+import json
 
 from pydantic import BaseModel, Field, Json
 from typing import Any
@@ -65,12 +66,16 @@ tags_metadata = [
         "description": "Create the Machine Learning Model based on ratings of the users. Be patient, it takes time...",
     },
     {
-        "name": "getModel",
-        "description": "Get the Machine Learning Model based on ratings of the users - Collaborative Filtering Model",
-    },
-    {
         "name": "getRecContent",
         "description": "Get a list of recommendated works based on similar features of products - Content-based Filtering",
+    },
+    {
+        "name": "getRecContentVectorCreateIndex",
+        "description": "Create an Index with vectors from data - Pinecone tool - https://app.pinecone.io/",
+    },
+    {
+        "name": "getRecContentVectorDb",
+        "description": "Get a list of recommendated works based on similar features of products - based on a Vector DB - Content-based Filtering",
     },
     {
         "name": "getRecCollaborative",
@@ -78,7 +83,7 @@ tags_metadata = [
     },
 ]
 
-# Function to call the endpoint
+# Function to call the generate model endpoint
 def update_model():
     with httpx.Client() as client:
         response = client.get("http://127.0.0.1:8765/generateModel?data_work_type=movies")
@@ -100,7 +105,9 @@ async def lifespan(app: FastAPI):
     print("Scheduler shutdown for create ML model.")
 
 
-app = FastAPI(lifespan=lifespan, title="ML API - Predict Rec Products", description="Get predicted recommendated products", version="0.0.1", openapi_tags=tags_metadata)
+#app = FastAPI(lifespan=lifespan, title="ML API - Predict Rec Products", description="Get predicted recommendated products", version="0.0.1", openapi_tags=tags_metadata)
+app = FastAPI(title="ML API - Predict Rec Products", description="Get predicted recommendated products", version="0.0.1", openapi_tags=tags_metadata)
+
 
 class typeOfDataWork(str, Enum):
     value1 = "movies"
@@ -182,11 +189,6 @@ async def generate_model(data_work_type:typeOfDataWork):
 
     return df_message
 
-@app.get("/getModel", tags=["getModel"])
-def get_model(request: Request):
-
-    return
-
 @app.get("/getRec/content/{product_id}/{count}", tags=["getRecContent"])
 async def get_rec_content(data_work_type:typeOfDataWork, product_id: int, count: int):
     #try:
@@ -216,6 +218,60 @@ async def get_rec_content(data_work_type:typeOfDataWork, product_id: int, count:
 
     #except Exception as error:
     #    return {'error': error}
+
+@app.get("/getRec/contentVec/createIndex", tags=["getRecContentVectorCreateIndex"])
+async def get_rec_content_vectordb_init(data_work_type:typeOfDataWork):
+    #try:
+        # List of works
+        data_works = get_data(product_id=None, count=None)
+        # create bag of words
+        data_similarities = get_data_similarities(data_works)
+        # get only bag of words and convert it to dictionnary
+        data_similarities["id"] = data_similarities["work_id"].astype(str)
+        # Transform list of works into dictionnary
+        data_similarities_dict = data_similarities.to_dict(orient='records')
+        data_similarities_prepared_for_vectors = data_similarities[["id","bag_of_words"]].to_dict(orient='records')
+
+        index, model, total_vectors = model_vector_indexing(data_similarities_dict, data_similarities_prepared_for_vectors)
+
+        endpoint_response = {
+            "message": f"OK, Vector Index was created and total of {total_vectors} vectors were added to the index"
+        }
+
+        return endpoint_response
+
+    #except Exception as error:
+    #    return {'error': error}
+
+@app.get("/getRec/contentVec/{product_id}/{count}", tags=["getRecContentVectorDb"])
+async def get_rec_content_vectordb(data_work_type:typeOfDataWork, product_id: int, count: int):
+    #try:
+        # List of works
+        data_works = get_data(product_id=None, count=None)
+        # Get Work Title from the ID
+        title = data_works.loc[data_works['work_id'] == product_id, 'title'].iloc[0]
+        # create bag of words
+        data_similarities = get_data_similarities(data_works)
+        # get only bag of words and convert it to dictionnary
+        data_similarities["id"] = data_similarities["work_id"].astype(str)
+        # Transform list of works into dictionnary
+        data_similarities_dict = data_similarities.to_dict(orient='records')
+        data_similarities_prepared_for_vectors = data_similarities[["id","bag_of_words"]].to_dict(orient='records')
+
+        print("title:",title)
+        #print(data_works[:3])
+        #print(data_similarities_prepared_for_vectors[:3])
+
+        predictOutput = model_content_recommender_vectors(data_similarities_dict, data_similarities_prepared_for_vectors, title, count)
+
+        ## Transform to JSON
+        rec_df_json = json.dumps(predictOutput)
+
+        return rec_df_json
+
+    #except Exception as error:
+    #    return {'error': error}
+
 
 @app.get("/getRec/collaborative/{data_work_type}/{user_id}/{count}", tags=["getRecCollaborative"])
 async def get_rec_collaborative(data_work_type:typeOfDataWork, user_id: int, count: int):
