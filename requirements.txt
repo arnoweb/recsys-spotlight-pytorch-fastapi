@@ -147,7 +147,6 @@ pexpect==4.9.0
 pillow==11.0.0
 pinecone==6.0.0rc2
 pinecone-client==5.0.1
-pinecone-plugin-inference==3.0.0
 pinecone-plugin-interface==0.0.7
 platformdirs==3.11.0
 ploomber-cloud==0.3.2
