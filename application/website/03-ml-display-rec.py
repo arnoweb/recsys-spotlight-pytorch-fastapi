@@ -53,7 +53,7 @@ def Page():
     data = get_data(product_id=None, count=None)
     #display_data(data)
 
-    data_users = get_data_users()
+    data_users = get_data_users(user_id=None, count=None)
     #display_data(data_users)
 
 

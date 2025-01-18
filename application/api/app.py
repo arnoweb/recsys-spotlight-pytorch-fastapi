@@ -86,7 +86,10 @@ tags_metadata = [
 # Function to call the generate model endpoint
 def update_model():
     with httpx.Client() as client:
-        response = client.get("http://127.0.0.1:8765/generateModel?data_work_type=movies")
+        #local
+        #response = client.get("http://127.0.0.1:8765/generateModel?data_work_type=movies")
+        #distant docker
+        response = client.get("http://127.0.0.1:8080/recsys-api/generateModel?data_work_type=movies")
         print("Task executed with response:", response.json())
 
 
@@ -106,7 +109,13 @@ async def lifespan(app: FastAPI):
 
 
 #app = FastAPI(lifespan=lifespan, title="ML API - Predict Rec Products", description="Get predicted recommendated products", version="0.0.1", openapi_tags=tags_metadata)
-app = FastAPI(title="ML API - Predict Rec Products", description="Get predicted recommendated products", version="0.0.1", openapi_tags=tags_metadata)
+app = FastAPI(title="ML API - Predict Rec Products",
+              description="Get predicted recommendated products",
+              version="0.0.1",
+              openapi_tags=tags_metadata,
+              openapi_url="/recsys-api/openapi.json",
+              docs_url="/recsys-api/docs"
+              )
 
 
 class typeOfDataWork(str, Enum):
@@ -121,7 +130,7 @@ class Item(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"message": "Fastapi - Rec Sys based on Spotlight"}
+    return {"message": "API- Recommandation System based either on Machine Learning Model Spotlight TfidfVectorizer or Pinecone with encoding model all-MiniLM-L12-v2"}
 
 @app.get("/products", tags=["getProducts"])
 async def getProducts(product_id: Optional[int] = None, count: Optional[int] = None):
@@ -299,4 +308,6 @@ app.add_middleware(
 )
 
 if __name__ == "__main__":
-    uvicorn.run('app:app', host='0.0.0.0', port=8765)
+    #uvicorn.run('app:app', host='127.0.0.1', port=80)
+    uvicorn.run('app:app', host='0.0.0.0', port=6061)
+

@@ -22,7 +22,7 @@ import os
 
 import torch
 
-from application.utils.exploreData import DATA_WORK
+from exploreData import DATA_WORK
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -462,6 +462,14 @@ def model_content_recommender_vectors(data_works, data_similarities, title, coun
         include_metadata=True,
         filter={"title": {"$ne": title}}
     )
+
+    # Filter by threshold
+    threshold = 0.7
+    relevant_results = [res for res in results["matches"] if res["score"] >= threshold]
+
+    # Print relevant results
+    for res in relevant_results:
+        print(f"ID: {res['id']}, Score: {res['score']}, Metadata: {res['metadata']}")
 
     filtered_results = [
         {"work_id": match["id"], "title": match["metadata"]["title"]}
