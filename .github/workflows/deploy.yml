@@ -1,0 +1,34 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DIGITALOCEAN_DEPLOY_KEY }}
+
+      - name: Copy files to droplet
+        run: |
+          ssh -o StrictHostKeyChecking=no deployer@139.59.181.131 "mkdir -p ~/app"
+          rsync -avz --exclude '.git' ./ deployer@139.59.181.131:~/app/
+
+      - name: Build and deploy Docker container
+        run: |
+          ssh -o StrictHostKeyChecking=no deployer@139.59.181.131 "
+          cd ~/app &&
+          docker build --no-cache -t recsys-docker-build . &&
+          docker stop recsys-container || true &&
+          docker rm recsys-container || true &&
+          docker run -d -p 8080:80 --name recsys-container recsys-docker-build
+          "

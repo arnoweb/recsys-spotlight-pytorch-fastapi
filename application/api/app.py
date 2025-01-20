@@ -113,8 +113,7 @@ app = FastAPI(title="ML API - Predict Rec Products",
               description="Get predicted recommendated products",
               version="0.0.1",
               openapi_tags=tags_metadata,
-              openapi_url="/recsys-api/openapi.json",
-              docs_url="/recsys-api/docs"
+              root_path="/recsys-api"
               )
 
 
