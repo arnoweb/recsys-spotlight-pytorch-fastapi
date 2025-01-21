@@ -54,7 +54,7 @@ RUN /srv/venv-docker/bin/pip install -r requirements-docker.txt --no-cache-dir
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisord.conf
-COPY solara-docker/cdn /srv/venv-docker/share/solara/cdn
+#COPY solara-docker/cdn /srv/venv-docker/share/solara/cdn
 
 COPY . /srv
 
