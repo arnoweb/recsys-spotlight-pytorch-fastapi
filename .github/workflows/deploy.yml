@@ -21,7 +21,7 @@ jobs:
       - name: Copy files to droplet
         run: |
           ssh -o StrictHostKeyChecking=no deployer@139.59.181.131 "mkdir -p ~/app"
-          rsync -avz --exclude '.git' ./ deployer@139.59.181.131:~/app/
+          rsync -avz --exclude '.git .DS_Store' ./ deployer@139.59.181.131:~/app/
 
       - name: Build and deploy Docker container
         run: |
