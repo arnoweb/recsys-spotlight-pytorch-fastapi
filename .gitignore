@@ -12,3 +12,5 @@ credentials.json
 ploomber-cloud.json
 deploy.sh
 credentials.json
+supervisord.log
+solara-docker
