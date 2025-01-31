@@ -1,8 +1,4 @@
 [core]
-    autostage = true
-    remote = drive
-['remote "drive"']
-    url = gdrive://1FHyj1s4vRzVIVbbU7yJNzFbTbFHfrmTY
-    gdrive_acknowledge_abuse = true
-    gdrive_client_id = 38921657079-l3c0eo75ut9dhsrn0o52p06a0b6r9r3i.apps.googleusercontent.com
-    gdrive_client_secret = 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
+    remote = myremote-ssh
+['remote "myremote-ssh"']
+    url = ssh://deployer@139.59.181.131:22/home/deployer/app/model
