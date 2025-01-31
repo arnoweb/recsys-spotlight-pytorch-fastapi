@@ -4,7 +4,7 @@ on:
   push:
     branches:
       # only deploy from the main branch
-      - main
+      #- main
 
 jobs:
   deploy-to-ploomber-cloud:
