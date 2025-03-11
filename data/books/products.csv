@@ -1,0 +1,41 @@
+work_id,title,description,genre_1,genre_2,genre_3,auteur,year,url
+1,To Kill a Mockingbird,A novel by Harper Lee published in 1960.,Fiction,Classic,Southern Gothic,Harper Lee,1960,https://covers.openlibrary.org/b/isbn/9780060935467-L.jpg
+2,1984,A dystopian novel by George Orwell published in 1949.,Dystopian,Science Fiction,Political Fiction,George Orwell,1949,https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg
+3,The Great Gatsby,A novel by F. Scott Fitzgerald published in 1925.,Fiction,Classic,Tragedy,F. Scott Fitzgerald,1925,https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg
+4,The Catcher in the Rye,A novel by J.D. Salinger published in 1951.,Fiction,Classic,Coming-of-age,J.D. Salinger,1951,https://covers.openlibrary.org/b/isbn/9780316769488-L.jpg
+5,The Hobbit,A fantasy novel by J.R.R. Tolkien published in 1937.,Fantasy,Adventure,Children's Literature,J.R.R. Tolkien,1937,https://covers.openlibrary.org/b/isbn/9780618002214-L.jpg
+6,Pride and Prejudice,A novel by Jane Austen published in 1813.,Romance,Classic,Social Commentary,Jane Austen,1813,https://covers.openlibrary.org/b/isbn/9780199535569-L.jpg
+7,Moby-Dick,A novel by Herman Melville published in 1851.,Adventure,Classic,Epic,Herman Melville,1851,https://covers.openlibrary.org/b/isbn/9780199535569-L.jpg
+8,War and Peace,A novel by Leo Tolstoy published in 1869.,Historical Fiction,Classic,Epic,Leo Tolstoy,1869,https://covers.openlibrary.org/b/isbn/9780140447938-L.jpg
+9,The Odyssey,An epic poem by Homer.,Epic,Classic,Adventure,Homer,-800,https://covers.openlibrary.org/b/isbn/9780140449112-L.jpg
+10,Crime and Punishment,A novel by Fyodor Dostoevsky published in 1866.,Crime,Classic,Psychological Fiction,Fyodor Dostoevsky,1866,https://covers.openlibrary.org/b/isbn/9780486415871-L.jpg
+11,The Adventures of Huckleberry Finn,A novel by Mark Twain published in 1884.,Adventure,Classic,Satire,Mark Twain,1884,https://covers.openlibrary.org/b/isbn/9780486280615-L.jpg
+12,The Grapes of Wrath,A novel by John Steinbeck published in 1939.,Historical Fiction,Classic,Social Commentary,John Steinbeck,1939,https://covers.openlibrary.org/b/isbn/9780140186473-L.jpg
+13,The Lord of the Rings,A fantasy novel by J.R.R. Tolkien published in 1954.,Fantasy,Adventure,Epic,J.R.R. Tolkien,1954,https://covers.openlibrary.org/b/isbn/9780618002252-L.jpg
+14,The Divine Comedy,An epic poem by Dante Alighieri.,Epic,Classic,Religious,Dante Alighieri,1320,https://covers.openlibrary.org/b/isbn/9780199540365-L.jpg
+15,The Iliad,An epic poem by Homer.,Epic,Classic,War,Homer,-800,https://covers.openlibrary.org/b/isbn/9780140445928-L.jpg
+16,The Brothers Karamazov,A novel by Fyodor Dostoevsky published in 1880.,Philosophical,Classic,Psychological Fiction,Fyodor Dostoevsky,1880,https://covers.openlibrary.org/b/isbn/9780374528379-L.jpg
+17,The Stranger,A novel by Albert Camus published in 1942.,Existential,Classic,Philosophical,Albert Camus,1942,https://covers.openlibrary.org/b/isbn/9780679720201-L.jpg
+18,The Metamorphosis,A novella by Franz Kafka published in 1915.,Absurdist,Classic,Existential,Franz Kafka,1915,https://covers.openlibrary.org/b/isbn/9780553213690-L.jpg
+19,The Picture of Dorian Gray,A novel by Oscar Wilde published in 1890.,Gothic,Classic,Philosophical,Oscar Wilde,1890,https://covers.openlibrary.org/b/isbn/9780199535590-L.jpg
+20,The Sun Also Rises,A novel by Ernest Hemingway published in 1926.,Modernist,Classic,Expatriate,Ernest Hemingway,1926,https://covers.openlibrary.org/b/isbn/9780743297332-L.jpg
+21,Brave New World,A dystopian novel by Aldous Huxley published in 1932.,Dystopian,Science Fiction,Social Commentary,Aldous Huxley,1932,https://covers.openlibrary.org/b/isbn/9780060932149-L.jpg
+22,Fahrenheit 451,A dystopian novel by Ray Bradbury published in 1953.,Dystopian,Science Fiction,Social Commentary,Ray Bradbury,1953,https://covers.openlibrary.org/b/isbn/9781451673319-L.jpg
+23,The Alchemist,A novel by Paulo Coelho published in 1988.,Fiction,Philosophical,Adventure,Paulo Coelho,1988,https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg
+24,The Da Vinci Code,A mystery thriller by Dan Brown published in 2003.,Mystery,Thriller,Conspiracy,Dan Brown,2003,https://covers.openlibrary.org/b/isbn/9780307277671-L.jpg
+25,The Hunger Games,A dystopian novel by Suzanne Collins published in 2008.,Dystopian,Young Adult,Science Fiction,Suzanne Collins,2008,https://covers.openlibrary.org/b/isbn/9780439023528-L.jpg
+26,The Girl with the Dragon Tattoo,A crime novel by Stieg Larsson published in 2005.,Crime,Mystery,Thriller,Stieg Larsson,2005,https://covers.openlibrary.org/b/isbn/9780307454546-L.jpg
+27,The Kite Runner,A novel by Khaled Hosseini published in 2003.,Fiction,Historical,Drama,Khaled Hosseini,2003,https://covers.openlibrary.org/b/isbn/9781594480003-L.jpg
+28,The Night Circus,A fantasy novel by Erin Morgenstern published in 2011.,Fantasy,Magical Realism,Romance,Erin Morgenstern,2011,https://covers.openlibrary.org/b/isbn/9780385534635-L.jpg
+29,The Fault in Our Stars,A young adult novel by John Green published in 2012.,Young Adult,Romance,Drama,John Green,2012,https://covers.openlibrary.org/b/isbn/9780142424175-L.jpg
+30,The Goldfinch,A novel by Donna Tartt published in 2013.,Fiction,Literary,Drama,Donna Tartt,2013,https://covers.openlibrary.org/b/isbn/9780316055437-L.jpg
+31,The Name of the Wind,A fantasy novel by Patrick Rothfuss published in 2007.,Fantasy,Adventure,Epic,Patrick Rothfuss,2007,https://covers.openlibrary.org/b/isbn/9780756404741-L.jpg
+32,The Way of Kings,A fantasy novel by Brandon Sanderson published in 2010.,Fantasy,Adventure,Epic,Brandon Sanderson,2010,https://covers.openlibrary.org/b/isbn/9780765326355-L.jpg
+33,The Lies of Locke Lamora,A fantasy novel by Scott Lynch published in 2006.,Fantasy,Adventure,Heist,Scott Lynch,2006,https://covers.openlibrary.org/b/isbn/9780553588941-L.jpg
+34,The First Law Trilogy,A fantasy series by Joe Abercrombie published in 2006.,Fantasy,Adventure,Epic,Joe Abercrombie,2006,https://covers.openlibrary.org/b/isbn/9781591025948-L.jpg
+35,The Blade Itself,A fantasy novel by Joe Abercrombie published in 2006.,Fantasy,Adventure,Epic,Joe Abercrombie,2006,https://covers.openlibrary.org/b/isbn/9781591025948-L.jpg
+36,The Final Empire,A fantasy novel by Brandon Sanderson published in 2006.,Fantasy,Adventure,Epic,Brandon Sanderson,2006,https://covers.openlibrary.org/b/isbn/9780765311788-L.jpg
+37,The Eye of the World,A fantasy novel by Robert Jordan published in 1990.,Fantasy,Adventure,Epic,Robert Jordan,1990,https://covers.openlibrary.org/b/isbn/9780812511819-L.jpg
+38,The Shadow of the Torturer,A science fiction novel by Gene Wolfe published in 1980.,Science Fiction,Fantasy,Adventure,Gene Wolfe,1980,https://covers.openlibrary.org/b/isbn/9780671571439-L.jpg
+39,The Left Hand of Darkness,A science fiction novel by Ursula K. Le Guin published in 1969.,Science Fiction,Fantasy,Adventure,Ursula K. Le Guin,1969,https://covers.openlibrary.org/b/isbn/9780441478125-L.jpg
+40,The Dispossessed,A science fiction novel by Ursula K. Le Guin published in 1974.,Science Fiction,Fantasy,Adventure,Ursula K. Le Guin,1974,https://covers.openlibrary.org/b/isbn/9780060936288-L.jpg

@@ -22,7 +22,7 @@ import os
 
 import torch
 
-from exploreData import DATA_WORK
+#from exploreData import DATA_WORK
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -75,7 +75,7 @@ def get_best_iteration_for_model(dataset):
 
     # Define a range of iteration on model to get best Scores or lowest RMSE
     #n_iter_values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-    n_iter_values = [1, 2, 3, 4, 5]
+    n_iter_values = [1, 10, 20, 30, 40, 50, 60]
 
     # Track the best n_iter and corresponding RMSE
     best_rmse = np.inf  # Best RMSE for this specific n_iter
@@ -170,7 +170,7 @@ def save_model(users_rating_model, data_work_type):
 
     print(process_msg)
 
-    return pd.DataFrame({'message': ['The model was successfully saved locally and push via DVC to google drive']})
+    return pd.DataFrame({'message': ['The model was successfully saved locally and push via DVC to the server']})
 
 
 def create_model(dataset, type='explicit', test_percentage=0.2, n_iter=1, with_model_fit=0):
@@ -360,11 +360,11 @@ def model_vector_db_init():
 
     return pc
 
-def model_vector_create_index():
+def model_vector_create_index(product_type):
 
     pc = model_vector_db_init()
 
-    index_name = DATA_WORK
+    index_name = product_type
 
     if not pc.has_index(index_name):
         pc.create_index(

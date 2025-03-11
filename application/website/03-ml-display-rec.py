@@ -19,6 +19,9 @@ import torch
 
 # Declare reactive variables at the top level. Components using these variables
 # will be re-executed when their values change.
+products_types = ["shoes", "movies", "books"]
+products_type = solara.reactive("movies")
+
 word_limit = solara.reactive(10)
 
 # default value for select of rec select
@@ -40,20 +43,27 @@ def Page():
 
     solara.Markdown(
         f"""
-        # Machine Learning - Recommandation d'oeuvres - spectacles ou films
+        # Machine Learning - Recommandation de produits
     """
     )
 
     solara.Markdown(
         f"""
-        ## Les spectacles ou films recommandés pour un utilisateur en fonction de son évaluation
+        ## Les produits recommandés pour un utilisateur en fonction de son évaluation
     """
     )
 
-    data = get_data(product_id=None, count=None)
+
+
+    solara.ToggleButtonsSingle(value=products_type, values=products_types)
+    solara.Markdown(f"**Selected**: {products_type.value}")
+
+    products_type_selected = products_type.value
+
+    data = get_data(product_type=products_type_selected, product_id=None, count=None)
     #display_data(data)
 
-    data_users = get_data_users(user_id=None, count=None)
+    data_users = get_data_users(product_type=products_type_selected,user_id=None, count=None)
     #display_data(data_users)
 
 
@@ -61,7 +71,7 @@ def Page():
     ## Check of torch model file
     ############################################################################
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    relative_path_model = "../../model/" + DATA_WORK + '_users_rating_model.pth'
+    relative_path_model = "../../model/" + products_type_selected + '_users_rating_model.pth'
     model_path = os.path.abspath(os.path.join(current_dir,     relative_path_model))
     sys.path.insert(0,  model_path)
 
@@ -106,9 +116,12 @@ def Page():
 
                 show_title = row['title']
                 show_genre = row['genre_1']
+                show_year = str(row['year'])
+                show_score = str(row['score'])
+                show_info = f"{show_year} - {show_genre} "
                 #show_venue = row['venue']
 
-                with solara.Card(title=show_title, subtitle=show_genre):
+                with solara.Card(title=show_title, subtitle=show_info):
 
                     #solara.Markdown(f"{show_venue}")
 
@@ -117,7 +130,12 @@ def Page():
                     else:
                         image_url = 'https://placehold.co/300x400?text=No%20Image'
 
-                    solara.Image(image_url)
+                    solara.Image(
+                        image=image_url,
+                        width="70%"
+                    )
+
+                    solara.Markdown(f"Score : {show_score}")
     else:
 
         solara.Markdown(

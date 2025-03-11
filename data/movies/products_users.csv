@@ -1,0 +1,11 @@
+user_id,user_gender,user_age,user_zip,user_firstname,user_lastname
+1,Male,25,10001,Arnaud,Breton
+2,Female,30,90001,Jane,Smith
+3,Male,22,60601,Michael,Johnson
+4,Female,28,94101,Emily,Davis
+5,Non-Binary,35,30301,Alex,Martinez
+6,Male,40,73301,David,Anderson
+7,Female,27,33101,Sarah,Thomas
+8,Male,32,20001,James,White
+9,Female,24,19101,Laura,Harris
+10,Male,29,85001,Robert,Clark

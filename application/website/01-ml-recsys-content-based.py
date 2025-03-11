@@ -36,8 +36,11 @@ from wordcloud import WordCloud, STOPWORDS
 # Declare reactive variables at the top level. Components using these variables
 # will be re-executed when their values change.
 
-#Get default work title
-work_default_title = get_work_default()
+products_types = ["shoes", "movies", "books"]
+products_type = solara.reactive("movies")
+
+# Get default work title
+work_default_title = get_work_default(products_type)
 
 #select_default_shows = solara.reactive("Lohengrin")
 select_default_shows = solara.reactive(work_default_title)
@@ -62,15 +65,23 @@ def Page():
 
     solara.Markdown(
         f"""
-        ## Les spectacles (saison 23-24) ou films (année jusqu'à 1996)
+        ## Les spectacles (saison 23-24) ou films (de 2014 à 2024)
     """
     )
 
     # Define nltk stopwords in french
     #stopwords_french = stopwords.words('french')
 
+    solara.ToggleButtonsSingle(value=products_type, values=products_types)
+    solara.Markdown(f"**Selected**: {products_type.value}")
+
+    products_type_selected = products_type.value
+
+    # Get default work title
+    select_default_shows = get_work_default(products_type_selected)
+
     # Dataframe of items
-    data = get_data(product_id=None, count=None)
+    data = get_data(product_type=products_type_selected, product_id=None, count=None)
 
     solara.DataFrame(data, items_per_page=5)
 
@@ -109,7 +120,7 @@ def Page():
         ## Les achats des oeuvres par utilisateur (fictif)
     """
     )
-    data_purchase = get_data_users_purchases(user_id = None, count = None)
+    data_purchase = get_data_users_purchases(product_type=products_type_selected, user_id = None, count = None)
     solara.DataFrame(data_purchase, items_per_page=5)
 
     solara.Markdown(
@@ -118,7 +129,7 @@ def Page():
     """
     )
 
-    data_views = get_data_users_page_views(user_id = None, count = None)
+    data_views = get_data_users_page_views(product_type=products_type_selected, user_id = None, count = None)
     solara.DataFrame(data_views, items_per_page=5)
 
     solara.Markdown(
@@ -127,7 +138,7 @@ def Page():
     """
     )
 
-    data_users = get_data_users(user_id = None, count = None)
+    data_users = get_data_users(product_type=products_type_selected, user_id = None, count = None)
     solara.DataFrame(data_users, items_per_page=5)
 
     solara.Markdown(
@@ -262,14 +273,18 @@ def Page():
         # Sort the movies based on the cosine similarity scores
         sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
 
-        # Get the scores of the 10 most similar shows. Ignore the first movie.
+        # Get the scores of the X most similar shows. Ignore the first movie.
         sim_scores = sim_scores[1:limit]
 
         # Get the show indices
         show_indices = [i[0] for i in sim_scores]
 
+        # Get the show indices
+        show_scores = [i[1] for i in sim_scores]
+
         # Return the top most similar show
         rec = df.iloc[show_indices]
+        rec['score'] = show_scores
 
         # Sort by score based on purchase - popularity
         if (with_score):
@@ -313,6 +328,7 @@ def Page():
 
 
     rec_df_from_select = content_recommender(sv, df=data, with_score=False)
+    print('rec_df_from_select:', rec_df_from_select)
 
     solara.Markdown(f"####Si l'utilisateur se rend sur le Produit *{select_default_shows.value}* alors il aura les recommandations proposées suivantes:")
 
@@ -322,12 +338,15 @@ def Page():
 
             show_title = row['title']
             show_genre = row['genre_1']
+            show_year = str(row['year'])
+            show_score = str(row['score'])
+            show_info = f"{show_year} - {show_genre} "
             #show_venue = row['venue']
             show_description = row['description']
 
-            with solara.Card(title=show_title, subtitle=show_genre):
+            with solara.Card(title=show_title, subtitle=show_info):
 
-                #solara.Markdown(f"{show_title}")
+                #solara.Markdown(f"{show_year}")
 
                 if pd.notna(row['url']):
                     image_url = row['url']
@@ -336,10 +355,10 @@ def Page():
 
                 solara.Image(
                    image=image_url,
-                    width="30%"
+                    width="70%"
                 )
 
-                solara.Markdown(f"{show_description}")
+                solara.Markdown(f"Score : {show_score}")
 
     #solara.DataFrame(rec_df_search_select, items_per_page=5)
     solara.DataFrame(rec_df_from_select, items_per_page=5)
@@ -358,18 +377,24 @@ def Page():
 
             show_title = row['title']
             show_genre = row['genre_1']
+            show_score = str(row['score'])
             #show_venue = row['venue']
 
             with solara.Card(title=show_title, subtitle=show_genre):
 
-                solara.Markdown(f"{show_title}")
+                #solara.Markdown(f"{show_title}")
 
                 if pd.notna(row['url']):
                     image_url = row['url']
                 else:
                     image_url = 'https://placehold.co/300x400?text=No%20Image'
 
-                solara.Image(image_url)
+                solara.Image(
+                   image=image_url,
+                    width="70%"
+                )
+
+                solara.Markdown(f"Score : {show_score}")
 
 
 # The following line is required only when running the code in a Jupyter notebook:

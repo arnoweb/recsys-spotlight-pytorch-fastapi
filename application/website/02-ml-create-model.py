@@ -22,7 +22,9 @@ from spotlight.interactions import Interactions
 
 # Declare reactive variables at the top level. Components using these variables
 # will be re-executed when their values change.
-sentence = solara.reactive("Solara makes our team more productive.")
+products_types = ["shoes", "movies", "books"]
+products_type = solara.reactive("movies")
+
 word_limit = solara.reactive(10)
 
 
@@ -48,25 +50,30 @@ def Page():
     ## Exploration et chargement des données
     ############################################################################
 
+    solara.ToggleButtonsSingle(value=products_type, values=products_types)
+    solara.Markdown(f"**Selected**: {products_type.value}")
+
+    products_type_selected = products_type.value
+
     exploreData()
 
-    data = get_data(product_id = None, count = None)
+    data = get_data(product_type=products_type_selected, product_id = None, count = None)
     display_data(data)
 
-    data_users = get_data_users(user_id = None, count = None)
+    data_users = get_data_users(product_type=products_type_selected, user_id = None, count = None)
     display_data(data_users)
 
-    data_purchase = get_data_users_purchases(user_id = None, count = None)
+    data_purchase = get_data_users_purchases(product_type=products_type_selected, user_id = None, count = None)
     display_data(data_purchase)
 
-    print(DATA_WORK)
-
-    if DATA_WORK == 'shows':
-        data_ratings = get_data_ratings(data_purchase)
-    elif DATA_WORK == 'movies':
-        data_ratings = get_data_users_ratings(user_id = None, count = None)
+    if products_type_selected == 'shows':
+        data_ratings = get_data_ratings( data_purchase, product_type=products_type_selected)
+    elif products_type_selected == 'movies':
+        data_ratings = get_data_users_ratings(product_type=products_type_selected, user_id = None, count = None)
+    elif products_type_selected == 'books':
+        data_ratings = get_data_users_ratings(product_type=products_type_selected, user_id = None, count = None)
     else:
-        data_ratings = get_data_ratings(data_purchase)
+        data_ratings = get_data_ratings(data_purchase, product_type=products_type_selected)
 
     display_data(data_ratings)
 
@@ -75,9 +82,9 @@ def Page():
     ratings_values = data_ratings['rating'].values.astype(np.int32)
 
     #df_info(data_ratings,'data_ratings')
-    #print(user_ids)
-    #print(item_ids)
-    #print(ratings_values)
+    #print('user_ids', user_ids)
+    #print('item_ids',item_ids)
+    #print('ratings_values', ratings_values)
 
     #quit()
 
@@ -85,23 +92,22 @@ def Page():
     # weight_values_plays = data_plays['views'].values.astype(np.int32)
 
     ############################################################################
-    ## Vérification existance du model torch
+    ## Vérification existence du model torch
     ############################################################################
     current_dir = os.getcwd() + '/model/'
-    relative_path_model = DATA_WORK + '_users_rating_model.pth'
+    relative_path_model = products_type_selected + '_users_rating_model.pth'
     model_path = os.path.join(current_dir, relative_path_model)
     #model_path = '/Users/a.breton/digital_projects/machine-learning/recsys-spotlight-pytorch-fastapi/model/' + DATA_WORK + '_users_rating_model.pth'
 
 
     if not os.path.exists(model_path):
 
-        # Create Spotlight Interactions
         dataset = Interactions(user_ids, item_ids, ratings=ratings_values)
-
         # dataset = Interactions(user_ids, item_ids, ratings=None, weights=weight_values_views)
 
         #Define a range of iteration on model to get best Scores or lowest RMSE
-        n_iter_values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        #n_iter_values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        n_iter_values = [1, 10, 20, 30, 40, 50]
 
         # Track the best n_iter and corresponding RMSE
         best_rmse = np.inf  # Best RMSE for this specific n_iter
