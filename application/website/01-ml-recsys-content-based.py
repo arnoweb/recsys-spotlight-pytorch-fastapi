@@ -1,5 +1,6 @@
 import sys
 import os
+from icecream import ic
 from pathlib import Path
 
 #sys.path.append(os.path.join(os.getcwd(), 'application/utils'))
@@ -35,18 +36,25 @@ from wordcloud import WordCloud, STOPWORDS
 
 # Declare reactive variables at the top level. Components using these variables
 # will be re-executed when their values change.
-
 products_types = ["shoes", "movies", "books"]
 products_type = solara.reactive("movies")
 
 # Get default work title
 work_default_title = get_work_default(products_type)
-
-#select_default_shows = solara.reactive("Lohengrin")
 select_default_shows = solara.reactive(work_default_title)
+
+
+def cb_on_toggle_change(new_products_type):
+    #Assign the default value of the reactive select_default_shows
+    #to get the Work title changed into the select of products after changing the type of the product
+    select_default_shows.value = get_work_default(new_products_type)
+
 
 @solara.component
 def Page():
+
+    #solara.Markdown(f"**Current:** {select_default_shows}")
+
 
     solara.Style(
         """
@@ -58,27 +66,24 @@ def Page():
 
     solara.Markdown(
         f"""
-        # Machine Learning - Recommandation d'oeuvres - spectacles ou films
+        # Machine Learning - Recommandation de produits
         # 1 > Exploration des données
     """
     )
 
     solara.Markdown(
         f"""
-        ## Les spectacles (saison 23-24) ou films (de 2014 à 2024)
+        ## Sélectionner un jeu de données
     """
     )
 
     # Define nltk stopwords in french
     #stopwords_french = stopwords.words('french')
 
-    solara.ToggleButtonsSingle(value=products_type, values=products_types)
-    solara.Markdown(f"**Selected**: {products_type.value}")
+    solara.ToggleButtonsSingle(value=products_type, values=products_types, on_value=cb_on_toggle_change)
+    #solara.Markdown(f"**Selected**: {products_type.value}")
 
     products_type_selected = products_type.value
-
-    # Get default work title
-    select_default_shows = get_work_default(products_type_selected)
 
     # Dataframe of items
     data = get_data(product_type=products_type_selected, product_id=None, count=None)
@@ -87,7 +92,7 @@ def Page():
 
     solara.Markdown(
         f"""
-         ## Les oeuvres - création d'un ensemble de mots pour caractériser les oeuvres
+         ## Création d'un ensemble de mots pour caractériser les produits
      """
     )
     # Création du bags of Words et de la répétition des mots sur certaines caractéristiques des oeuvres
@@ -117,7 +122,7 @@ def Page():
 
     solara.Markdown(
         f"""
-        ## Les achats des oeuvres par utilisateur (fictif)
+        ## Les achats des produits par utilisateur (fictif)
     """
     )
     data_purchase = get_data_users_purchases(product_type=products_type_selected, user_id = None, count = None)
@@ -125,7 +130,7 @@ def Page():
 
     solara.Markdown(
         f"""
-        ## Les oeuvres consultées sur le site web (fictif)
+        ## Les produits consultées sur le site web (fictif)
     """
     )
 
@@ -143,11 +148,11 @@ def Page():
 
     solara.Markdown(
         f"""
-        ## Les scores calculés en fonction du rating qui est basé sur les ventes des oeuvres (fictif)
+        ## Les scores calculés en fonction du rating qui est basé sur les ventes des produits (fictif)
     """
     )
 
-    # Application du Rating sur les oeuvres (fictif)
+    # Application du Rating sur les produits (fictif)
     data_ratings = pd.DataFrame(data_purchase)
     data_ratings_sorted = data_ratings.sort_values(by='work_id')
 
@@ -297,7 +302,7 @@ def Page():
 
     solara.Markdown(
         f"""
-        ## Moteur de recommandations des oeuvres - démarrage à froid - étape 1
+        ## Moteur de recommandations des produits - démarrage à froid - étape 1
         ### Sans prise en compte des interactions utilisateurs
     """
     )
@@ -317,20 +322,17 @@ def Page():
     select_data_shows = np.array(data['title']).tolist()
     select_data_shows_id = np.array(data['work_id']).tolist()
 
-    solara.Select(label="Oeuvre", value=select_default_shows, values=select_data_shows)
+    solara.Select(label="Produit", value=select_default_shows, values=select_data_shows)
 
-    if select_default_shows.value != 'Choisir...':
+    if select_default_shows.value:
         sv = select_default_shows.value
     else:
-        sv = work_default_title
-
-    rec_df_search_select = data[data['title'] == sv]
-
+        sv = data['title'].iloc[0]
 
     rec_df_from_select = content_recommender(sv, df=data, with_score=False)
     print('rec_df_from_select:', rec_df_from_select)
 
-    solara.Markdown(f"####Si l'utilisateur se rend sur le Produit *{select_default_shows.value}* alors il aura les recommandations proposées suivantes:")
+    solara.Markdown(f"####Si l'utilisateur se rend sur le Produit **<span style='font-size:1.3em;'>{sv}</span>** alors il aura les recommandations proposées suivantes:")
 
     with solara.Row(gap="10px", justify="space-around"):
 
@@ -364,7 +366,7 @@ def Page():
     solara.DataFrame(rec_df_from_select, items_per_page=5)
 
     solara.Markdown(
-        f"####Les recommandations en fonction des ventes pour l'oeuvre sélectionnée : {select_default_shows.value}")
+        f"####Les recommandations en fonction des ventes du produit sélectionné : **<span style='font-size:1.3em;'>{sv}</span>**")
 
     rec_df_rating_from_select = content_recommender(sv, df=data_with_score, with_score=True)
 

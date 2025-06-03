@@ -149,7 +149,7 @@ def display_data(df):
 
 def get_work_default(product_type='movies'):
     if product_type == 'movies':
-        return 'Lohengrin'
+        return 'Interstellar'
     elif product_type == 'books':
         return '1984'
     elif product_type == 'shoes':
