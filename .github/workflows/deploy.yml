@@ -2,33 +2,34 @@ name: Deploy to DigitalOcean
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
 
-      - name: Set up SSH
+      - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.DIGITALOCEAN_DEPLOY_KEY }}
 
-      - name: Copy files to droplet
+      - name: Rsync recsys repo to droplet
         run: |
-          ssh -o StrictHostKeyChecking=no deployer@139.59.181.131 "mkdir -p ~/app"
-          rsync -avz --exclude '.git .DS_Store' ./ deployer@139.59.181.131:~/app/
+          ssh -o StrictHostKeyChecking=no deployer@${{ secrets.DIGITALOCEAN_HOST }} "mkdir -p ~/app/recsys"
+          rsync -avz --delete --exclude '.DS_Store' --exclude '.git' --exclude '.github' ./ deployer@${{ secrets.DIGITALOCEAN_HOST }}:~/app/recsys/
 
-      - name: Build and deploy Docker container
+      - name: Rebuild only recsys service (remote)
         run: |
-          ssh -o StrictHostKeyChecking=no deployer@139.59.181.131 "
-          cd ~/app &&
-          docker build --no-cache -t recsys-docker-build . &&
-          docker stop recsys-container || true &&
-          docker rm recsys-container || true &&
-          docker run -d -p 8080:80 --name recsys-container recsys-docker-build
-          "
+          ssh -o StrictHostKeyChecking=no deployer@${{ secrets.DIGITALOCEAN_HOST }} 'bash -se' <<'EOF'
+          set -euo pipefail
+          cd ~/app/licenses
+          # Install Docker if missing
+          command -v docker >/dev/null 2>&1 || curl -fsSL https://get.docker.com | sh
+          docker compose build recsys
+          docker compose up -d recsys
+          docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+          EOF
