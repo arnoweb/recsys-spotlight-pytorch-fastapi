@@ -27,8 +27,12 @@ jobs:
           ssh -o StrictHostKeyChecking=no deployer@${{ secrets.DIGITALOCEAN_HOST }} 'bash -se' <<'EOF'
           set -euo pipefail
           cd ~/app/licenses
+          
           # Install Docker if missing
           command -v docker >/dev/null 2>&1 || curl -fsSL https://get.docker.com | sh
+          
+          docker rm -f licenses-apilic-1 || true
+          
           docker compose build recsys
           docker compose up -d recsys
           docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
