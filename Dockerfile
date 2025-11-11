@@ -29,9 +29,9 @@ RUN python -m venv /srv/venv-docker
 # you might modify it to install another version
 RUN /srv/venv-docker/bin/pip install --upgrade pip setuptools wheel
 RUN /srv/venv-docker/bin/pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
-# Spotlight's setup.py expects the legacy setuptools entrypoint, so we disable the
-# default PEP 517 build isolation to keep installation compatible with pip>=25.
-RUN /srv/venv-docker/bin/pip install --no-cache-dir --no-build-isolation --no-use-pep517 \
+# Spotlight's setup.py expects the legacy setuptools entrypoint, so we turn off the
+# default PEP 517 build path via environment variables (the CLI flag was removed in pip>=25).
+RUN PIP_NO_BUILD_ISOLATION=1 PIP_USE_PEP517=0 /srv/venv-docker/bin/pip install --no-cache-dir \
     git+https://github.com/maciejkula/spotlight.git@75f4c8c55090771b52b88ef1a00f75bb39f9f2a9
 
 
