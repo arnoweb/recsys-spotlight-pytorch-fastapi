@@ -38,7 +38,7 @@ movies_df = pd.concat([movies_df.drop(columns=['genres']), genres_split], axis=1
 
 # Move the 'Director' column to the end
 date_col = movies_df.pop('Director')
-movies_df['auteur'] = date_col
+movies_df['author'] = date_col
 
 # Move the 'year' column to the end
 date_col = movies_df.pop('year')

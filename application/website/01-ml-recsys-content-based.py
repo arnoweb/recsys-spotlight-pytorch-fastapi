@@ -20,17 +20,30 @@ import numpy as np
 #from sentence_transformers import SentenceTransformer
 import pandas as pd
 
-from collections import Counter
-import nltk
-nltk.download('stopwords', download_dir=stopwords_dir)
-# Construct the path to the French stopwords file
-stopwords_french_path = os.path.join(stopwords_dir, 'corpora', 'stopwords', 'french')
+from collections import OrderedDict, Counter
 
-# Load French stopwords manually
-with open(stopwords_french_path, 'r', encoding='utf-8') as file:
-    stopwords_french = [line.strip() for line in file]
+class DataFrameLRUCache:
+    def __init__(self, maxsize=64):
+        self.maxsize = maxsize
+        self.store = OrderedDict()
 
-#from nltk.corpus import stopwords
+    def get(self, key, compute_fn):
+        if key in self.store:
+            self.store.move_to_end(key)
+            return self.store[key].copy()
+
+        value = compute_fn()
+        if len(self.store) >= self.maxsize:
+            self.store.popitem(last=False)
+        self.store[key] = value
+        return value.copy()
+
+    def clear(self):
+        self.store.clear()
+
+#######################################################################
+# stopwords_terms already populated when exploreData is imported above
+#######################################################################
 
 from wordcloud import WordCloud, STOPWORDS
 
@@ -42,6 +55,10 @@ products_type = solara.reactive("movies")
 # Get default work title
 work_default_title = get_work_default(products_type)
 select_default_shows = solara.reactive(work_default_title)
+show_raw_tables = solara.reactive(False)
+content_rec_cache = DataFrameLRUCache(maxsize=64)
+popularity_rec_cache = DataFrameLRUCache(maxsize=64)
+cache_cleared = solara.reactive(False)
 
 
 def cb_on_toggle_change(new_products_type):
@@ -61,15 +78,30 @@ def Page():
         .v-application--wrap {
             padding:1em; !important
         }
+        .product-select {
+            max-width: 320px;
+        }
         """
     )
 
     solara.Markdown(
         f"""
         # Machine Learning - Recommandation de produits
-        # 1 > Exploration des données
     """
     )
+
+    solara.Markdown(
+        """Cas d’usage “utilisateur non connecté” : cette page illustre un démarrage à froid. On combine deux techniques :\n"
+        "- **Content-based** – analyse du contenu (descriptions, genres, auteurs) pour proposer des alternatives proches de l’article consulté.\n"
+        "- **Popularité** – classement des meilleures ventes fictives (achats récents) pour mettre en avant les produits les plus demandés.\n"
+        "Ainsi, même sans profil utilisateur, on peut déjà suggérer des produits pertinents."""
+    )
+    if show_raw_tables.value:
+        solara.Markdown(
+            f"""
+            # 1 > Exploration des données
+        """
+        )
 
     solara.Markdown(
         f"""
@@ -77,10 +109,25 @@ def Page():
     """
     )
 
-    # Define nltk stopwords in french
-    #stopwords_french = stopwords.words('french')
+    # Define nltk stopwords (loaded via exploreData)
+    #stopwords_terms = stopwords.words('english')
 
     solara.ToggleButtonsSingle(value=products_type, values=products_types, on_value=cb_on_toggle_change)
+    solara.Switch(label="Afficher les tableaux bruts", value=show_raw_tables)
+    with solara.Row(gap="8px", justify="start"):
+        solara.Button(
+            "Vider le cache",
+            on_click=lambda: (
+                content_rec_cache.clear(),
+                popularity_rec_cache.clear(),
+                cache_cleared.set(True) if hasattr(cache_cleared, "set") else setattr(cache_cleared, "value", True),
+            ),
+            color="grey",
+            text=False,
+            classes=["ma-2"],
+        )
+        if cache_cleared.value:
+            solara.Markdown("Cache vidé")
     #solara.Markdown(f"**Selected**: {products_type.value}")
 
     products_type_selected = products_type.value
@@ -88,13 +135,15 @@ def Page():
     # Dataframe of items
     data = get_data(product_type=products_type_selected, product_id=None, count=None)
 
-    solara.DataFrame(data, items_per_page=5)
+    if show_raw_tables.value:
+        solara.DataFrame(data, items_per_page=5)
 
-    solara.Markdown(
-        f"""
-         ## Création d'un ensemble de mots pour caractériser les produits
-     """
-    )
+    if show_raw_tables.value:
+        solara.Markdown(
+            f"""
+             ## Création d'un ensemble de mots pour caractériser les produits
+         """
+        )
     # Création du bags of Words et de la répétition des mots sur certaines caractéristiques des oeuvres
     # If no description is given in the dataset, we cannot recommand it
     data = data.dropna(subset=['description'], how='any')
@@ -102,7 +151,7 @@ def Page():
     # Set the display options to show the full content
     pd.set_option('display.max_colwidth', None)
 
-    # To improve model, add bag_of_words with auteur genre or venue repeating to give more weight
+    # To improve model, add bag_of_words with author genre or venue repeating to give more weight
     data['genre_improved_multi'] = data['genre_1'].apply(lambda x: repeat_word(x, 2))
     data['genre_improved_multi'] = data['genre_improved_multi'].apply(lambda x: ' '.join(map(str, x)))
     data.insert(4, 'genre_improved', data['genre_improved_multi'])
@@ -118,45 +167,62 @@ def Page():
     X = np.array(data_similarities)
 
     data_for_display_only = pd.DataFrame(data['bag_of_words'])
-    solara.DataFrame(data_for_display_only, items_per_page=5)
+    if show_raw_tables.value:
+        solara.DataFrame(data_for_display_only, items_per_page=5)
 
-    solara.Markdown(
-        f"""
-        ## Les achats des produits par utilisateur (fictif)
-    """
-    )
+    if show_raw_tables.value:
+        solara.Markdown(
+            f"""
+            ## Les achats des produits par utilisateur (fictif)
+        """
+        )
     data_purchase = get_data_users_purchases(product_type=products_type_selected, user_id = None, count = None)
-    solara.DataFrame(data_purchase, items_per_page=5)
+    if show_raw_tables.value:
+        solara.DataFrame(data_purchase, items_per_page=5)
 
-    solara.Markdown(
-        f"""
-        ## Les produits consultées sur le site web (fictif)
-    """
+    data_purchase_last_month = get_data_users_purchases(
+        product_type=products_type_selected,
+        user_id=None,
+        count=None,
+        since_days=30
     )
+    if data_purchase_last_month.empty:
+        data_purchase_last_month = data_purchase.copy()
+
+    if show_raw_tables.value:
+        solara.Markdown(
+            f"""
+            ## Les produits consultées sur le site web (fictif)
+        """
+        )
 
     data_views = get_data_users_page_views(product_type=products_type_selected, user_id = None, count = None)
-    solara.DataFrame(data_views, items_per_page=5)
+    if show_raw_tables.value:
+        solara.DataFrame(data_views, items_per_page=5)
 
-    solara.Markdown(
-        f"""
-        ## Les utilisateurs avec données démographiques et géographiques du site web (fictif)
-    """
-    )
+    if show_raw_tables.value:
+        solara.Markdown(
+            f"""
+            ## Les utilisateurs avec données démographiques et géographiques du site web (fictif)
+        """
+        )
 
     data_users = get_data_users(product_type=products_type_selected, user_id = None, count = None)
-    solara.DataFrame(data_users, items_per_page=5)
+    if show_raw_tables.value:
+        solara.DataFrame(data_users, items_per_page=5)
 
-    solara.Markdown(
-        f"""
-        ## Les scores calculés en fonction du rating qui est basé sur les ventes des produits (fictif)
-    """
-    )
+    if show_raw_tables.value:
+        solara.Markdown(
+            f"""
+            ## Les scores calculés en fonction du rating qui est basé sur les ventes des produits (fictif)
+        """
+        )
 
     # Application du Rating sur les produits (fictif)
-    data_ratings = pd.DataFrame(data_purchase)
+    data_ratings = pd.DataFrame(data_purchase_last_month)
     data_ratings_sorted = data_ratings.sort_values(by='work_id')
 
-    data_ratings_2 = pd.DataFrame(data_purchase)
+    data_ratings_2 = pd.DataFrame(data_purchase_last_month)
     data_ratings_2_sorted = data_ratings_2.sort_values(by='work_id')
 
     #data_ratings['rating'] = data_ratings['total_purchases'].apply(rating_to_show)
@@ -201,22 +267,24 @@ def Page():
     #print(data_items_merge.head())
     #print(data_items_merge.info())
 
-    solara.DataFrame(data_items_merge, items_per_page=5)
+    if show_raw_tables.value:
+        solara.DataFrame(data_items_merge, items_per_page=5)
 
     data_with_score = data.merge(data_items_merge, on='work_id', how='left')
 
     data_with_score = data_with_score[['work_id', 'title_x', 'description_x', 'genre_1_x', 'genre_improved_x',
-                                       'auteur_x', 'url_x', 'genre_improved_multi_x', 'bag_of_words_x', 'score']]
+                                       'author_x', 'url_x', 'genre_improved_multi_x', 'bag_of_words_x', 'price_x', 'score']]
     data_with_score.rename(columns={'title_x': 'title', 'description_x': 'description', 'genre_1_x': 'genre_1',
-                                    'genre_improved_x': 'genre_improved', 'auteur_x': 'auteur',
-                                    'url_x': 'url', 'genre_improved_multi_x': 'genre_improved_multi',
+                                    'genre_improved_x': 'genre_improved', 'author_x': 'author',
+                                    'url_x': 'url', 'genre_improved_multi_x': 'genre_improved_multi','price_x': 'price',
                                     'bag_of_words_x': 'bag_of_words'}, inplace=True)
 
     data_with_score = data_with_score.sort_values('score', ascending=False)
 
     print(df_info(data_with_score, 'data_with_score'))
 
-    solara.DataFrame(data_with_score, items_per_page=5)
+    if show_raw_tables.value:
+        solara.DataFrame(data_with_score, items_per_page=5)
 
     #data_for_display_only = pd.DataFrame(data_with_score['score'])
     #solara.DataFrame(data_for_display_only, items_per_page=5)
@@ -229,7 +297,7 @@ def Page():
     from sklearn.feature_extraction.text import CountVectorizer
 
     # Define a CV Vectorizer Object. Remove all french stopwords
-    cv = CountVectorizer(stop_words=stopwords_french)
+    cv = CountVectorizer(stop_words=stopwords_terms)
 
     # Construct the required CV matrix by applying the fit_transform method on the overview feature
     cv_matrix = cv.fit_transform(data_similarities)
@@ -241,7 +309,7 @@ def Page():
     from sklearn.feature_extraction.text import TfidfVectorizer
 
     # Define a TF-IDF Vectorizer Object. Remove all french stopwords
-    tfidf = TfidfVectorizer(stop_words=stopwords_french)
+    tfidf = TfidfVectorizer(stop_words=stopwords_terms)
 
     # Construct the required TF-IDF matrix by applying the fit_transform method on the overview feature
     tfidf_matrix = tfidf.fit_transform(data_similarities)
@@ -321,16 +389,36 @@ def Page():
 
     select_data_shows = np.array(data['title']).tolist()
     select_data_shows_id = np.array(data['work_id']).tolist()
+    select_data_shows_genre = np.array(data['genre_1']).tolist()
 
-    solara.Select(label="Produit", value=select_default_shows, values=select_data_shows)
+    select_options = []
+    option_to_title = {}
+    for work_id, title, genre in zip(select_data_shows_id, select_data_shows, select_data_shows_genre):
+        label = f"{work_id} - {title} ({genre})"
+        select_options.append(label)
+        option_to_title[label] = title
 
-    if select_default_shows.value:
-        sv = select_default_shows.value
-    else:
-        sv = data['title'].iloc[0]
+    current_value = select_default_shows.value
+    if current_value in option_to_title.values():
+        for label, title in option_to_title.items():
+            if title == current_value:
+                select_default_shows.value = label
+                break
+    elif current_value not in option_to_title:
+        select_default_shows.value = select_options[0]
 
-    rec_df_from_select = content_recommender(sv, df=data, with_score=False)
-    print('rec_df_from_select:', rec_df_from_select)
+    solara.Select(label="Produit", value=select_default_shows, values=select_options, dense=True, classes=["product-select"])
+
+    selected_label = select_default_shows.value or select_options[0]
+    sv = option_to_title.get(selected_label, data['title'].iloc[0])
+
+    def compute_content_rec():
+        return content_recommender(sv, df=data, with_score=False).reset_index(drop=True)
+
+    rec_df_from_select = content_rec_cache.get(
+        (products_type_selected, sv),
+        compute_content_rec,
+    )
 
     solara.Markdown(f"####Si l'utilisateur se rend sur le Produit **<span style='font-size:1.3em;'>{sv}</span>** alors il aura les recommandations proposées suivantes:")
 
@@ -343,35 +431,61 @@ def Page():
             show_year = str(row['year'])
             show_score = str(row['score'])
             show_info = f"{show_year} - {show_genre} "
-            #show_venue = row['venue']
+            show_price_raw = row['price'] if 'price' in row.index else None
+            price_text = None
+            if pd.notna(show_price_raw):
+                try:
+                    price_value = float(show_price_raw)
+                    price_text = f"{price_value:,.2f} €"
+                except (TypeError, ValueError):
+                    price_text = f"{show_price_raw} €"
             show_description = row['description']
 
-            with solara.Card(title=show_title, subtitle=show_info):
+            with solara.Card(
+                title=show_title,
+                subtitle=show_info,
+                style="text-align: center; width: 320px; margin: auto;",
+                classes=["d-flex", "flex-column", "align-center"],
+                elevation=4,
+            ):
 
                 #solara.Markdown(f"{show_year}")
+
+                if price_text:
+                    solara.Markdown(f"Prix : {price_text}", style="text-align: center; font-weight: 600;")
 
                 if pd.notna(row['url']):
                     image_url = row['url']
                 else:
                     image_url = 'https://placehold.co/300x400?text=No%20Image'
 
-                solara.Image(
-                   image=image_url,
-                    width="70%"
-                )
+                solara.Column([
+                    solara.Image(
+                       image=image_url,
+                        width="220px"
+                    )
+                ], align="center")
 
-                solara.Markdown(f"Score : {show_score}")
+                solara.Markdown(f"Score : {show_score}", style="text-align: center; font-weight: bold;")
 
     #solara.DataFrame(rec_df_search_select, items_per_page=5)
-    solara.DataFrame(rec_df_from_select, items_per_page=5)
+    if show_raw_tables.value:
+        solara.DataFrame(rec_df_from_select, items_per_page=5)
 
     solara.Markdown(
-        f"####Les recommandations en fonction des ventes du produit sélectionné : **<span style='font-size:1.3em;'>{sv}</span>**")
+        f"####Les recommandations en fonction des ventes du mois dernier du produit sélectionné : **<span style='font-size:1.3em;'>{sv}</span>**")
 
-    rec_df_rating_from_select = content_recommender(sv, df=data_with_score, with_score=True)
+    def compute_popularity_rec():
+        return content_recommender(sv, df=data_with_score, with_score=True).reset_index(drop=True)
+
+    rec_df_rating_from_select = popularity_rec_cache.get(
+        (products_type_selected, sv, "popularity"),
+        compute_popularity_rec,
+    )
 
     rec_df_rating_from_select_display_only = pd.DataFrame(rec_df_rating_from_select['score'])
-    solara.DataFrame(rec_df_rating_from_select_display_only, items_per_page=5)
+    if show_raw_tables.value:
+        solara.DataFrame(rec_df_rating_from_select_display_only, items_per_page=5)
 
     with solara.Row(gap="10px", justify="space-around"):
 
@@ -380,24 +494,42 @@ def Page():
             show_title = row['title']
             show_genre = row['genre_1']
             show_score = str(row['score'])
+            show_price_raw = row['price'] if 'price' in row.index else None
+            price_text = None
+            if pd.notna(show_price_raw):
+                try:
+                    price_value = float(show_price_raw)
+                    price_text = f"{price_value:,.2f} €"
+                except (TypeError, ValueError):
+                    price_text = f"{show_price_raw} €"
             #show_venue = row['venue']
 
-            with solara.Card(title=show_title, subtitle=show_genre):
+            with solara.Card(
+                title=show_title,
+                subtitle=show_genre,
+                style="text-align: center; width: 320px; margin: auto;",
+                classes=["d-flex", "flex-column", "align-center"],
+                elevation=4,
+            ):
 
                 #solara.Markdown(f"{show_title}")
+
+                if price_text:
+                    solara.Markdown(f"Prix : {price_text}", style="text-align: center; font-weight: 600;")
 
                 if pd.notna(row['url']):
                     image_url = row['url']
                 else:
                     image_url = 'https://placehold.co/300x400?text=No%20Image'
 
-                solara.Image(
-                   image=image_url,
-                    width="70%"
-                )
+                solara.Column([
+                    solara.Image(
+                       image=image_url,
+                        width="220px"
+                    )
+                ], align="center")
 
-                solara.Markdown(f"Score : {show_score}")
-
+                solara.Markdown(f"Score : {show_score}", style="text-align: center; font-weight: bold;")
 
 # The following line is required only when running the code in a Jupyter notebook:
 Page()

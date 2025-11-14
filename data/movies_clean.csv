@@ -1,4 +1,4 @@
-work_id,title,description,genre_1,genre_2,genre_3,auteur,year,url
+work_id,title,description,genre_1,genre_2,genre_3,author,year,url
 1,Toy Story,A cowboy doll is profoundly threatened and jealous when a new spaceman figure supplants him as top toy in a boy's room.,Adventure,Animation,Children|Comedy|Fantasy,John Lasseter,1995,"https://m.media-amazon.com/images/M/MV5BMDU2ZWJlMjktMTRhMy00ZTA5LWEzNDgtYmNmZTEwZTViZWJkXkEyXkFqcGdeQXVyNDQ2OTk4MzI@._V1_UX67_CR0,0,67,98_AL_.jpg"
 2,Jumanji,"Four teens are pulled into a magical video game, facing dangerous challenges in a jungle to escape and survive together.",Adventure,Children,Fantasy,Joe Johnston,1995,https://m.media-amazon.com/images/I/91gMfB-mlaL.__AC_SX300_SY300_QL70_ML2_.jpg
 3,Grumpier Old Men,,Comedy,Romance,,,1995,

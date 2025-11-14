@@ -1,5 +1,5 @@
 outs:
-- md5: 5909874d48edd6a83d2f34d9ad844de5
-  size: 76927822
+- md5: 290556c7f8b61c5cca51f7fd37ac3000
+  size: 28942
   hash: md5
   path: movies_users_rating_model.pth

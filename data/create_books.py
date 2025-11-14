@@ -9,7 +9,7 @@ books = [
         "genre_1": "Fiction",
         "genre_2": "Classic",
         "genre_3": "Southern Gothic",
-        "auteur": "Harper Lee",
+        "author": "Harper Lee",
         "year": 1960,
         "url": "https://covers.openlibrary.org/b/isbn/9780060935467-L.jpg"
     },
@@ -20,7 +20,7 @@ books = [
         "genre_1": "Dystopian",
         "genre_2": "Science Fiction",
         "genre_3": "Political Fiction",
-        "auteur": "George Orwell",
+        "author": "George Orwell",
         "year": 1949,
         "url": "https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg"
     },
@@ -31,7 +31,7 @@ books = [
         "genre_1": "Fiction",
         "genre_2": "Classic",
         "genre_3": "Tragedy",
-        "auteur": "F. Scott Fitzgerald",
+        "author": "F. Scott Fitzgerald",
         "year": 1925,
         "url": "https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg"
     },
@@ -42,7 +42,7 @@ books = [
         "genre_1": "Fiction",
         "genre_2": "Classic",
         "genre_3": "Coming-of-age",
-        "auteur": "J.D. Salinger",
+        "author": "J.D. Salinger",
         "year": 1951,
         "url": "https://covers.openlibrary.org/b/isbn/9780316769488-L.jpg"
     },
@@ -53,7 +53,7 @@ books = [
         "genre_1": "Fantasy",
         "genre_2": "Adventure",
         "genre_3": "Children's Literature",
-        "auteur": "J.R.R. Tolkien",
+        "author": "J.R.R. Tolkien",
         "year": 1937,
         "url": "https://covers.openlibrary.org/b/isbn/9780618002214-L.jpg"
     },
@@ -64,7 +64,7 @@ books = [
         "genre_1": "Romance",
         "genre_2": "Classic",
         "genre_3": "Social Commentary",
-        "auteur": "Jane Austen",
+        "author": "Jane Austen",
         "year": 1813,
         "url": "https://covers.openlibrary.org/b/isbn/9780199535569-L.jpg"
     },
@@ -75,7 +75,7 @@ books = [
         "genre_1": "Adventure",
         "genre_2": "Classic",
         "genre_3": "Epic",
-        "auteur": "Herman Melville",
+        "author": "Herman Melville",
         "year": 1851,
         "url": "https://covers.openlibrary.org/b/isbn/9780199535569-L.jpg"
     },
@@ -86,7 +86,7 @@ books = [
         "genre_1": "Historical Fiction",
         "genre_2": "Classic",
         "genre_3": "Epic",
-        "auteur": "Leo Tolstoy",
+        "author": "Leo Tolstoy",
         "year": 1869,
         "url": "https://covers.openlibrary.org/b/isbn/9780140447938-L.jpg"
     },
@@ -97,7 +97,7 @@ books = [
         "genre_1": "Epic",
         "genre_2": "Classic",
         "genre_3": "Adventure",
-        "auteur": "Homer",
+        "author": "Homer",
         "year": -800,
         "url": "https://covers.openlibrary.org/b/isbn/9780140449112-L.jpg"
     },
@@ -108,7 +108,7 @@ books = [
         "genre_1": "Crime",
         "genre_2": "Classic",
         "genre_3": "Psychological Fiction",
-        "auteur": "Fyodor Dostoevsky",
+        "author": "Fyodor Dostoevsky",
         "year": 1866,
         "url": "https://covers.openlibrary.org/b/isbn/9780486415871-L.jpg"
     },
@@ -119,7 +119,7 @@ books = [
         "genre_1": "Adventure",
         "genre_2": "Classic",
         "genre_3": "Satire",
-        "auteur": "Mark Twain",
+        "author": "Mark Twain",
         "year": 1884,
         "url": "https://covers.openlibrary.org/b/isbn/9780486280615-L.jpg"
     },
@@ -130,7 +130,7 @@ books = [
         "genre_1": "Historical Fiction",
         "genre_2": "Classic",
         "genre_3": "Social Commentary",
-        "auteur": "John Steinbeck",
+        "author": "John Steinbeck",
         "year": 1939,
         "url": "https://covers.openlibrary.org/b/isbn/9780140186473-L.jpg"
     },
@@ -141,7 +141,7 @@ books = [
         "genre_1": "Fantasy",
         "genre_2": "Adventure",
         "genre_3": "Epic",
-        "auteur": "J.R.R. Tolkien",
+        "author": "J.R.R. Tolkien",
         "year": 1954,
         "url": "https://covers.openlibrary.org/b/isbn/9780618002252-L.jpg"
     },
@@ -152,7 +152,7 @@ books = [
         "genre_1": "Epic",
         "genre_2": "Classic",
         "genre_3": "Religious",
-        "auteur": "Dante Alighieri",
+        "author": "Dante Alighieri",
         "year": 1320,
         "url": "https://covers.openlibrary.org/b/isbn/9780199540365-L.jpg"
     },
@@ -163,7 +163,7 @@ books = [
         "genre_1": "Epic",
         "genre_2": "Classic",
         "genre_3": "War",
-        "auteur": "Homer",
+        "author": "Homer",
         "year": -800,
         "url": "https://covers.openlibrary.org/b/isbn/9780140445928-L.jpg"
     },
@@ -174,7 +174,7 @@ books = [
         "genre_1": "Philosophical",
         "genre_2": "Classic",
         "genre_3": "Psychological Fiction",
-        "auteur": "Fyodor Dostoevsky",
+        "author": "Fyodor Dostoevsky",
         "year": 1880,
         "url": "https://covers.openlibrary.org/b/isbn/9780374528379-L.jpg"
     },
@@ -185,7 +185,7 @@ books = [
         "genre_1": "Existential",
         "genre_2": "Classic",
         "genre_3": "Philosophical",
-        "auteur": "Albert Camus",
+        "author": "Albert Camus",
         "year": 1942,
         "url": "https://covers.openlibrary.org/b/isbn/9780679720201-L.jpg"
     },
@@ -196,7 +196,7 @@ books = [
         "genre_1": "Absurdist",
         "genre_2": "Classic",
         "genre_3": "Existential",
-        "auteur": "Franz Kafka",
+        "author": "Franz Kafka",
         "year": 1915,
         "url": "https://covers.openlibrary.org/b/isbn/9780553213690-L.jpg"
     },
@@ -207,7 +207,7 @@ books = [
         "genre_1": "Gothic",
         "genre_2": "Classic",
         "genre_3": "Philosophical",
-        "auteur": "Oscar Wilde",
+        "author": "Oscar Wilde",
         "year": 1890,
         "url": "https://covers.openlibrary.org/b/isbn/9780199535590-L.jpg"
     },
@@ -218,7 +218,7 @@ books = [
         "genre_1": "Modernist",
         "genre_2": "Classic",
         "genre_3": "Expatriate",
-        "auteur": "Ernest Hemingway",
+        "author": "Ernest Hemingway",
         "year": 1926,
         "url": "https://covers.openlibrary.org/b/isbn/9780743297332-L.jpg"
     },
@@ -229,7 +229,7 @@ books = [
         "genre_1": "Dystopian",
         "genre_2": "Science Fiction",
         "genre_3": "Social Commentary",
-        "auteur": "Aldous Huxley",
+        "author": "Aldous Huxley",
         "year": 1932,
         "url": "https://covers.openlibrary.org/b/isbn/9780060932149-L.jpg"
     },
@@ -240,7 +240,7 @@ books = [
         "genre_1": "Dystopian",
         "genre_2": "Science Fiction",
         "genre_3": "Social Commentary",
-        "auteur": "Ray Bradbury",
+        "author": "Ray Bradbury",
         "year": 1953,
         "url": "https://covers.openlibrary.org/b/isbn/9781451673319-L.jpg"
     },
@@ -251,7 +251,7 @@ books = [
         "genre_1": "Fiction",
         "genre_2": "Philosophical",
         "genre_3": "Adventure",
-        "auteur": "Paulo Coelho",
+        "author": "Paulo Coelho",
         "year": 1988,
         "url": "https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg"
     },
@@ -262,7 +262,7 @@ books = [
         "genre_1": "Mystery",
         "genre_2": "Thriller",
         "genre_3": "Conspiracy",
-        "auteur": "Dan Brown",
+        "author": "Dan Brown",
         "year": 2003,
         "url": "https://covers.openlibrary.org/b/isbn/9780307277671-L.jpg"
     },
@@ -273,7 +273,7 @@ books = [
         "genre_1": "Dystopian",
         "genre_2": "Young Adult",
         "genre_3": "Science Fiction",
-        "auteur": "Suzanne Collins",
+        "author": "Suzanne Collins",
         "year": 2008,
         "url": "https://covers.openlibrary.org/b/isbn/9780439023528-L.jpg"
     },
@@ -284,7 +284,7 @@ books = [
         "genre_1": "Crime",
         "genre_2": "Mystery",
         "genre_3": "Thriller",
-        "auteur": "Stieg Larsson",
+        "author": "Stieg Larsson",
         "year": 2005,
         "url": "https://covers.openlibrary.org/b/isbn/9780307454546-L.jpg"
     },
@@ -295,7 +295,7 @@ books = [
         "genre_1": "Fiction",
         "genre_2": "Historical",
         "genre_3": "Drama",
-        "auteur": "Khaled Hosseini",
+        "author": "Khaled Hosseini",
         "year": 2003,
         "url": "https://covers.openlibrary.org/b/isbn/9781594480003-L.jpg"
     },
@@ -306,7 +306,7 @@ books = [
         "genre_1": "Fantasy",
         "genre_2": "Magical Realism",
         "genre_3": "Romance",
-        "auteur": "Erin Morgenstern",
+        "author": "Erin Morgenstern",
         "year": 2011,
         "url": "https://covers.openlibrary.org/b/isbn/9780385534635-L.jpg"
     },
@@ -317,7 +317,7 @@ books = [
         "genre_1": "Young Adult",
         "genre_2": "Romance",
         "genre_3": "Drama",
-        "auteur": "John Green",
+        "author": "John Green",
         "year": 2012,
         "url": "https://covers.openlibrary.org/b/isbn/9780142424175-L.jpg"
     },
@@ -328,7 +328,7 @@ books = [
         "genre_1": "Fiction",
         "genre_2": "Literary",
         "genre_3": "Drama",
-        "auteur": "Donna Tartt",
+        "author": "Donna Tartt",
         "year": 2013,
         "url": "https://covers.openlibrary.org/b/isbn/9780316055437-L.jpg"
     },
@@ -339,7 +339,7 @@ books = [
         "genre_1": "Fantasy",
         "genre_2": "Adventure",
         "genre_3": "Epic",
-        "auteur": "Patrick Rothfuss",
+        "author": "Patrick Rothfuss",
         "year": 2007,
         "url": "https://covers.openlibrary.org/b/isbn/9780756404741-L.jpg"
     },
@@ -350,7 +350,7 @@ books = [
         "genre_1": "Fantasy",
         "genre_2": "Adventure",
         "genre_3": "Epic",
-        "auteur": "Brandon Sanderson",
+        "author": "Brandon Sanderson",
         "year": 2010,
         "url": "https://covers.openlibrary.org/b/isbn/9780765326355-L.jpg"
     },
@@ -361,7 +361,7 @@ books = [
         "genre_1": "Fantasy",
         "genre_2": "Adventure",
         "genre_3": "Heist",
-        "auteur": "Scott Lynch",
+        "author": "Scott Lynch",
         "year": 2006,
         "url": "https://covers.openlibrary.org/b/isbn/9780553588941-L.jpg"
     },
@@ -372,7 +372,7 @@ books = [
         "genre_1": "Fantasy",
         "genre_2": "Adventure",
         "genre_3": "Epic",
-        "auteur": "Joe Abercrombie",
+        "author": "Joe Abercrombie",
         "year": 2006,
         "url": "https://covers.openlibrary.org/b/isbn/9781591025948-L.jpg"
     },
@@ -383,7 +383,7 @@ books = [
         "genre_1": "Fantasy",
         "genre_2": "Adventure",
         "genre_3": "Epic",
-        "auteur": "Joe Abercrombie",
+        "author": "Joe Abercrombie",
         "year": 2006,
         "url": "https://covers.openlibrary.org/b/isbn/9781591025948-L.jpg"
     },
@@ -394,7 +394,7 @@ books = [
         "genre_1": "Fantasy",
         "genre_2": "Adventure",
         "genre_3": "Epic",
-        "auteur": "Brandon Sanderson",
+        "author": "Brandon Sanderson",
         "year": 2006,
         "url": "https://covers.openlibrary.org/b/isbn/9780765311788-L.jpg"
     },
@@ -405,7 +405,7 @@ books = [
         "genre_1": "Fantasy",
         "genre_2": "Adventure",
         "genre_3": "Epic",
-        "auteur": "Robert Jordan",
+        "author": "Robert Jordan",
         "year": 1990,
         "url": "https://covers.openlibrary.org/b/isbn/9780812511819-L.jpg"
     },
@@ -416,7 +416,7 @@ books = [
         "genre_1": "Science Fiction",
         "genre_2": "Fantasy",
         "genre_3": "Adventure",
-        "auteur": "Gene Wolfe",
+        "author": "Gene Wolfe",
         "year": 1980,
         "url": "https://covers.openlibrary.org/b/isbn/9780671571439-L.jpg"
     },
@@ -427,7 +427,7 @@ books = [
         "genre_1": "Science Fiction",
         "genre_2": "Fantasy",
         "genre_3": "Adventure",
-        "auteur": "Ursula K. Le Guin",
+        "author": "Ursula K. Le Guin",
         "year": 1969,
         "url": "https://covers.openlibrary.org/b/isbn/9780441478125-L.jpg"
     },
@@ -438,7 +438,7 @@ books = [
         "genre_1": "Science Fiction",
         "genre_2": "Fantasy",
         "genre_3": "Adventure",
-        "auteur": "Ursula K. Le Guin",
+        "author": "Ursula K. Le Guin",
         "year": 1974,
         "url": "https://covers.openlibrary.org/b/isbn/9780060936288-L.jpg"
     },
@@ -449,7 +449,7 @@ books = [
         "genre_1": "Fiction",
         "genre_2": "Magical Realism",
         "genre_3": "Mystery",
-        "auteur": "Haruki Murakami",
+        "author": "Haruki Murakami",
         "year": 1994,
         "url": "https://covers.openlibrary.org/b/isbn/9780679775430-L.jpg"
     },
@@ -460,7 +460,7 @@ books = [
         "genre_1": "Children's Literature",
         "genre_2": "Fantasy",
         "genre_3": "Adventure",
-        "auteur": "Kenneth Grahame",
+        "author": "Kenneth Grahame",
         "year": 1908,
         "url": "https://covers.openlibrary.org/b/isbn/9780486415871-L.jpg"
     },
@@ -471,7 +471,7 @@ books = [
         "genre_1": "Children's Literature",
         "genre_2": "Fantasy",
         "genre_3": "Adventure",
-        "auteur": "Kenneth Grahame",
+        "author": "Kenneth Grahame",
         "year": 1908,
         "url": "https://covers.openlibrary.org/b/isbn/9780486415871-L.jpg"
     },
@@ -482,7 +482,7 @@ books = [
         "genre_1": "Children's Literature",
         "genre_2": "Fantasy",
         "genre_3": "Adventure",
-        "auteur": "Kenneth Grahame",
+        "author": "Kenneth Grahame",
         "year": 1908,
         "url": "https://covers.openlibrary.org/b/isbn/9780486415871-L.jpg"
     },
@@ -493,7 +493,7 @@ books = [
         "genre_1": "Children's Literature",
         "genre_2": "Fantasy",
         "genre_3": "Adventure",
-        "auteur": "Kenneth Grahame",
+        "author": "Kenneth Grahame",
         "year": 1908,
         "url": "https://covers.openlibrary.org/b/isbn/9780486415871-L.jpg"
     },
@@ -504,7 +504,7 @@ books = [
         "genre_1": "Children's Literature",
         "genre_2": "Fantasy",
         "genre_3": "Adventure",
-        "auteur": "Kenneth Grahame",
+        "author": "Kenneth Grahame",
         "year": 1908,
         "url": "https://covers.openlibrary.org/b/isbn/9780486415871-L.jpg"
     },
@@ -515,7 +515,7 @@ books = [
         "genre_1": "Children's Literature",
         "genre_2": "Fantasy",
         "genre_3": "Adventure",
-        "auteur": "Kenneth Grahame",
+        "author": "Kenneth Grahame",
         "year": 1908,
         "url": "https://covers.openlibrary.org/b/isbn/9780486415871-L.jpg"
     },
@@ -526,7 +526,7 @@ books = [
         "genre_1": "Children's Literature",
         "genre_2": "Fantasy",
         "genre_3": "Adventure",
-        "auteur": "Kenneth Grahame",
+        "author": "Kenneth Grahame",
         "year": 1908,
         "url": "https://covers.openlibrary.org/b/isbn/9780486415871-L.jpg"
     },
@@ -537,7 +537,7 @@ books = [
         "genre_1": "Children's Literature",
         "genre_2": "Fantasy",
         "genre_3": "Adventure",
-        "auteur": "Kenneth Grahame",
+        "author": "Kenneth Grahame",
         "year": 1908,
         "url": "https://covers.openlibrary.org/b/isbn/9780486415871-L.jpg"
     },
@@ -548,7 +548,7 @@ books = [
         "genre_1": "Children's Literature",
         "genre_2": "Fantasy",
         "genre_3": "Adventure",
-        "auteur": "Kenneth Grahame",
+        "author": "Kenneth Grahame",
         "year": 1908,
         "url": "https://covers.openlibrary.org/b/isbn/9780486415871-L.jpg"
     }

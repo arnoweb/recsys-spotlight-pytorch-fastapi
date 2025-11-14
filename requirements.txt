@@ -217,7 +217,7 @@ solara==1.43.0
 solara-server==1.43.0
 solara-ui==1.43.0
 soupsieve==2.6
-spotlight @ git+https://github.com/maciejkula/spotlight.git@75f4c8c55090771b52b88ef1a00f75bb39f9f2a9
+spotlight @ git+https://github.com/christophlee/spotlight.git
 sqltrie==0.11.1
 sshfs==2024.9.0
 stack-data==0.6.3
@@ -230,7 +230,7 @@ threadpoolctl==3.5.0
 tinycss2==1.4.0
 tokenizers==0.20.3
 tomlkit==0.13.2
-torch==2.5.1
+torch==2.6.0
 tornado==6.4.1
 tqdm==4.67.0
 traitlets==5.14.3

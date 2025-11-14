@@ -289,12 +289,12 @@ def add_ratings_from_purchases(data, data_purchase):
 
     return data_items_merge
 
-def model_vectorization_cosine_similarities(data_works, data_similarities, stopwords_french, typeOfVec = "CountVec"):
+def model_vectorization_cosine_similarities(data_works, data_similarities, stopwords_terms, typeOfVec = "CountVec"):
 
     if(typeOfVec == "Tfidf"):
 
         # Define a TF-IDF Vectorizer Object. Remove all french stopwords
-        tfidf = TfidfVectorizer(stop_words=stopwords_french)
+        tfidf = TfidfVectorizer(stop_words=stopwords_terms)
 
         # Construct the required TF-IDF matrix by applying the fit_transform method on the overview feature
         matrix = tfidf.fit_transform(data_similarities)
@@ -305,7 +305,7 @@ def model_vectorization_cosine_similarities(data_works, data_similarities, stopw
     else:
 
         # Define a CV Vectorizer Object. Remove all french stopwords
-        cv = CountVectorizer(stop_words=stopwords_french)
+        cv = CountVectorizer(stop_words=stopwords_terms)
 
         # Construct the required CV matrix by applying the fit_transform method on the overview feature
         matrix = cv.fit_transform(data_similarities)
@@ -419,7 +419,7 @@ def model_vector_indexing(data_works, data_similarities_prepared_for_vectors):
                 "title": ds["title"],
                 "description": ds["description"],
                 "genre": ds["genre_1"],
-                "auteur": ds["auteur"],
+                "author": ds["author"],
                 "year": ds["year"]
             }
         })

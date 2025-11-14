@@ -215,7 +215,7 @@ async def get_rec_content(data_work_type:typeOfDataWork, product_id: int, count:
         #rename_data_with_score = get_data_with_score(data_similarities, data_with_ratings)
 
         # create cosine similarities matrix
-        cosine_sim, indices = model_vectorization_cosine_similarities(data_works, data_similarities, stopwords_french, typeOfVec = "CountVec")
+        cosine_sim, indices = model_vectorization_cosine_similarities(data_works, data_similarities, stopwords_terms, typeOfVec = "CountVec")
 
         predictOutput = model_content_recommender(title, cosine_sim, data_works, indices, limit=4, with_score=False)
 
@@ -309,4 +309,3 @@ app.add_middleware(
 if __name__ == "__main__":
     #uvicorn.run('app:app', host='127.0.0.1', port=80)
     uvicorn.run('app:app', host='0.0.0.0', port=6061)
-

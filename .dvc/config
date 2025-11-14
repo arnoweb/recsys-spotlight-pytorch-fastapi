@@ -1,4 +1,6 @@
 [core]
-    remote = myremote-ssh
-['remote "myremote-ssh"']
+    remote = prod
+['remote "prod"']
     url = ssh://deployer@139.59.181.131:22/home/deployer/app/model
+['remote "local"']
+    url = ssh://arnaudbreton@localhost:22/Users/arnaudbreton/Digital_projects/recsys_models

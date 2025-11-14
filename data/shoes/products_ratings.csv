@@ -1,4 +1,4 @@
-user_id,product_id,rating,timestamp
+user_id,work_id,rating,timestamp
 1,1,4,1694563200
 1,2,2,1679875200
 1,3,5,1689724800

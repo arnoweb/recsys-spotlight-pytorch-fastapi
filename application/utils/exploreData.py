@@ -11,21 +11,95 @@ import pandas as pd
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-#Stopwords dir
-stopwords_relative_path = '../../data/stopwords'
-stopwords_dir = os.path.abspath(os.path.join(current_dir, stopwords_relative_path))
+# Stopwords dir within the repository so we never rely on remote downloads at runtime.
+stopwords_root_relative = '../../data/stopwords'
+stopwords_root_dir = os.path.abspath(os.path.join(current_dir, stopwords_root_relative))
+stopwords_dir = stopwords_root_dir  # backward compatibility for other modules
+stopwords_corpus_dir = os.path.join(stopwords_root_dir, 'corpora', 'stopwords')
+os.makedirs(stopwords_corpus_dir, exist_ok=True)
 
+STOPWORDS_LANGUAGE = os.environ.get("STOPWORDS_LANGUAGE", "english").lower()
+stopwords_file_path = os.path.join(stopwords_corpus_dir, STOPWORDS_LANGUAGE)
 
-import nltk
-nltk.download('stopwords', download_dir=stopwords_dir)
-# Construct the path to the French stopwords file
-stopwords_french_path = os.path.join(stopwords_dir, 'corpora', 'stopwords', 'french')
+FALLBACK_STOPWORDS = {
+    'english': [
+        'a', 'about', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', "aren't",
+        'as', 'at', 'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by',
+        "can't", 'cannot', 'could', "couldn't", 'did', "didn't", 'do', 'does', "doesn't", 'doing', "don't",
+        'down', 'during', 'each', 'few', 'for', 'from', 'further', 'had', "hadn't", 'has', "hasn't", 'have',
+        "haven't", 'having', 'he', "he'd", "he'll", "he's", 'her', 'here', "here's", 'hers', 'herself', 'him',
+        'himself', 'his', 'how', "how's", 'i', "i'd", "i'll", "i'm", "i've", 'if', 'in', 'into', 'is',
+        "isn't", 'it', "it's", 'its', 'itself', "let's", 'me', 'more', 'most', "mustn't", 'my', 'myself',
+        'no', 'nor', 'not', 'of', 'off', 'on', 'once', 'only', 'or', 'other', 'ought', 'our', 'ours',
+        'ourselves', 'out', 'over', 'own', 'same', "shan't", 'she', "she'd", "she'll", "she's", 'should',
+        "shouldn't", 'so', 'some', 'such', 'than', 'that', "that's", 'the', 'their', 'theirs', 'them',
+        'themselves', 'then', 'there', "there's", 'these', 'they', "they'd", "they'll", "they're", "they've",
+        'this', 'those', 'through', 'to', 'too', 'under', 'until', 'up', 'very', 'was', "wasn't", 'we',
+        "we'd", "we'll", "we're", "we've", 'were', "weren't", 'what', "what's", 'when', "when's", 'where',
+        "where's", 'which', 'while', 'who', "who's", 'whom', 'why', "why's", 'will', 'with', "won't",
+        'would', "wouldn't", 'you', "you'd", "you'll", "you're", "you've", 'your', 'yours', 'yourself',
+        'yourselves'
+    ],
+    'french': [
+        'ai', 'aie', 'aient', 'aies', 'ainsi', 'allaient', 'aller', 'allons', 'alors', 'après', 'as',
+        'assez', 'attendu', 'au', 'aucun', 'aucune', 'aujourd', 'auquel', 'aura', 'aurai', 'auraient',
+        'aurais', 'aurait', 'auras', 'aurez', 'auriez', 'aurions', 'aurons', 'auront', 'aussi', 'autre',
+        'autres', 'aux', 'auxquelles', 'auxquels', 'avaient', 'avais', 'avait', 'avant', 'avec', 'avez',
+        'aviez', 'avions', 'avoir', 'avons', 'ayant', 'ayez', 'ayons', 'bah', 'bas', 'bien', 'bigre',
+        'bonjour', 'bravo', 'brrr', 'c', 'ça', 'car', 'ce', 'ceci', 'cela', 'celle', 'celle-ci',
+        'celle-là', 'celles', 'celles-ci', 'celles-là', 'celui', 'celui-ci', 'celui-là', 'cent', 'cependant',
+        'certain', 'certaine', 'certaines', 'certains', 'ces', 'cet', 'cette', 'ceux', 'ceux-ci', 'ceux-là',
+        'chacun', 'chaque', 'cher', 'chère', 'chères', 'chers', 'chez', 'chiche', 'chut', 'ci', 'cinq',
+        'clac', 'clic', 'combien', 'comme', 'comment', 'compris', 'concernant', 'contre', 'couic', 'crac',
+        'd', 'da', 'dans', 'de', 'debout', 'dedans', 'dehors', 'delà', 'depuis', 'derrière', 'des',
+        'dès', 'désormais', 'desquelles', 'desquels', 'dessous', 'dessus', 'deux', 'deuxième', 'deuxièmement',
+        'devant', 'devers', 'devoir', 'devra', 'devrait', 'diable', 'différent', 'différente', 'différentes',
+        'différents', 'dire', 'divers', 'diverse', 'diverses', 'dix', 'dix-huit', 'dix-neuf', 'dix-sept',
+        'dois', 'doit', 'donc', 'dont', 'douze', 'dring', 'du', 'duquel', 'durant', 'dès', 'dés',
+        'effet', 'eh', 'elle', 'elle-même', 'elles', 'elles-mêmes', 'en', 'encore', 'entre', 'envers',
+        'environ', 'es', 'ès', 'est', 'et', 'étaient', 'étais', 'était', 'étant', 'été', 'étée',
+        'étées', 'étés', 'êtes', 'être', 'eu', 'eue', 'eues', 'eus', 'eusse', 'eussent', 'eusses',
+        'eussiez', 'eussions', 'eut', 'eux', 'eux-mêmes', 'excepté', 'façon', 'fais', 'faisaient', 'faisant',
+        'fait', 'faite', 'faites', 'faits', 'faut', 'feront', 'fi', 'flac', 'floc', 'font', 'gens',
+        'ha', 'hé', 'hein', 'hélas', 'hem', 'hep', 'hi', 'ho', 'holà', 'hop', 'hormis', 'hors',
+        'hou', 'houp', 'hue', 'hui', 'hurrah', 'il', 'ils', 'importe', 'j', 'je', 'jusqu', 'jusque',
+        'l', 'la', 'laisser', 'laquelle', 'las', 'le', 'lequel', 'les', 'lès', 'lesquelles', 'lesquels',
+        'leur', 'leurs', 'longtemps', 'lors', 'lorsque', 'lui', 'lui-même', 'là', 'lès', 'ma', 'maint',
+        'mais', 'malgré', 'me', 'même', 'mêmes', 'merci', 'mes', 'mien', 'mienne', 'miennes', 'miens',
+        'mille', 'mince', 'moi', 'moi-même', 'moins', 'mon', 'moyennant', 'multiple', 'multiples', 'même',
+        'n', 'na', 'ne', 'néanmoins', 'neuf', 'neuvième', 'ni', 'nombreuses', 'nombreux', 'non', 'nos',
+        'notamment', 'notre', 'nôtre', 'nôtres', 'nous', 'nous-mêmes', 'nul', 'nulle', 'o', 'ô', 'oh',
+        'ohé', 'olé', 'ollé', 'on', 'ont', 'onze', 'onzième', 'ore', 'ou', 'où', 'ouf', 'ouias',
+        'oust', 'ouste', 'outre', 'paf', 'pan', 'par', 'parce', 'parmi', 'partant', 'particulier', 'particulière',
+        'particulièrement', 'pas', 'passé', 'pendant', 'personne', 'peu', 'peut', 'peuvent', 'peux', 'pff',
+        'pfft', 'pfut', 'pif', 'plein', 'plouf', 'plus', 'plusieurs', 'plutôt', 'pouah', 'pour', 'pourquoi',
+        'premier', 'première', 'premièrement', 'près', 'proche', 'psitt', 'pu', 'puis', 'puisque', 'pur',
+        'pure', 'qu', 'quadrillion', 'quand', 'quant', 'quanta', 'quant-à-soi', 'quarante', 'quatorze',
+        'quatre', 'quatre-vingt', 'quatrième', 'quatrièmement', 'que', 'quel', 'quelconque', 'quelle',
+        'quelles', 'quelque', 'quelques', 'quelquun', "quelqu'un", 'quels', 'qui', 'quiconque', 'quinze',
+        'quoi', 'quoique', 'rien', 's', 'sa', 'sans', 'sapristi', 'sauf', 'se', 'seize', 'selon',
+        'sept', 'septième', 'sera', 'serai', 'seraient', 'serais', 'serait', 'seras', 'serez', 'seriez',
+        'serions', 'serons', 'seront', 'ses', 'seul', 'seule', 'seulement', 'si', 'sien', 'sienne',
+        'siennes', 'siens', 'sinon', 'six', 'sixième', 'soi', 'soi-même', 'soient', 'sois', 'soit',
+        'soixante', 'sommes', 'son', 'sont', 'sous', 'souvent', 'soyez', 'soyons', 'suis', 'suivant',
+        'sur', 'surtout', 't', 'ta', 'tac', 'tandis', 'tant', 'te', 'tel', 'telle', 'tellement',
+        'telles', 'tels', 'tenant', 'tes', 'tic', 'tien', 'tienne', 'tiennes', 'tiens', 'toc', 'toi',
+        'toi-même', 'ton', 'touchant', 'toujours', 'tous', 'tout', 'toute', 'toutes', 'treize', 'trente',
+        'très', 'trois', 'troisième', 'troisièmement', 'trop', 'tsoin', 'tsouin', 'tu', 'un', 'une',
+        'unes', 'uns', 'va', 'vais', 'vas', 'vé', 'vers', 'via', 'vif', 'vifs', 'vingt', 'vivat',
+        'vive', 'vives', 'vlan', 'voici', 'voilà', 'vont', 'vos', 'votre', 'vous', 'vous-mêmes',
+        'vu', 'wagons', 'zut'
+    ]
+}
 
-# Load French stopwords manually
-with open(stopwords_french_path, 'r', encoding='utf-8') as file:
-    stopwords_french = [line.strip() for line in file]
+fallback_words = FALLBACK_STOPWORDS.get(STOPWORDS_LANGUAGE, FALLBACK_STOPWORDS['english'])
 
-#from nltk.corpus import stopwords
+if not os.path.exists(stopwords_file_path):
+    with open(stopwords_file_path, 'w', encoding='utf-8') as file:
+        file.write('\n'.join(sorted(set(fallback_words))))
+
+with open(stopwords_file_path, 'r', encoding='utf-8') as file:
+    stopwords_terms = [line.strip() for line in file if line.strip()]
 
 ######## PRODUCTS
 
@@ -35,8 +109,16 @@ def get_data(product_type, product_id, count):
     absolute_path_products_items = os.path.abspath(os.path.join(current_dir, relative_path_products_items))
 
     data = pd.read_csv(absolute_path_products_items)
-    data = data[['work_id', 'title', 'description', 'genre_1', 'auteur', 'year', 'url']]
+    base_columns = ['work_id', 'title', 'description', 'genre_1', 'author', 'year', 'url']
+    optional_columns = []
+    if 'price' in data.columns:
+        optional_columns.append('price')
+
+    data = data[base_columns + optional_columns]
     data['work_id'] = data['work_id'].astype(int)
+
+    if 'price' not in data.columns:
+        data['price'] = pd.NA
 
     if product_id is not None:
         if (data['work_id'] == product_id).any():
@@ -98,13 +180,20 @@ def get_data_users_ratings(product_type, user_id, count):
     return data
 
 
-def get_data_users_purchases(product_type, user_id, count):
+def get_data_users_purchases(product_type, user_id, count, since_days=None):
 
     relative_path_products_users_purchases = f"../../data/{product_type}/products_users_purchases.csv"
     absolute_path_products_users_purchases = os.path.abspath(
         os.path.join(current_dir, relative_path_products_users_purchases))
 
     data = pd.read_csv(absolute_path_products_users_purchases)
+
+    if 'timestamp' in data.columns:
+        data['timestamp'] = pd.to_datetime(data['timestamp'])
+        if since_days is not None:
+            cutoff = pd.Timestamp.now() - pd.Timedelta(days=since_days)
+            data = data[data['timestamp'] >= cutoff]
+        data = data.sort_values('timestamp', ascending=False).reset_index(drop=True)
 
     if user_id is not None:
         if (data['user_id'] == user_id).any():
@@ -153,7 +242,7 @@ def get_work_default(product_type='movies'):
     elif product_type == 'books':
         return '1984'
     elif product_type == 'shoes':
-        return 'Interstellar'
+        return 'Nike Air Zoom Pegasus 41'
     else:
         return 'Interstellar'
 
@@ -166,7 +255,7 @@ def get_data_similarities(data):
     # Set the display options to show the full content
     pd.set_option('display.max_colwidth', None)
 
-    # To improve model, add bag_of_words with auteur genre or venue repeating to give more weight
+    # To improve model, add bag_of_words with author genre or venue repeating to give more weight
     data['genre_improved_multi'] = data['genre_1'].apply(lambda x: repeat_word(x, 2))
     data['genre_improved_multi'] = data['genre_improved_multi'].apply(lambda x: ' '.join(map(str, x)))
     data.insert(4, 'genre_improved', data['genre_improved_multi'])
@@ -192,13 +281,12 @@ def get_data_ratings(data_purchase, product_type):
         data_ratings = pd.DataFrame(data_purchase)
         data_ratings['rating'] = data_ratings['total_purchases'].apply(rating_to_show)
 
-    elif product_type == 'movies':
+    elif product_type in ('movies', 'books', 'shoes'):
         data_ratings = pd.DataFrame(data_purchase)
         data_ratings['rating'] = data_ratings['total_purchases'].apply(rating_to_allpurchases_of_movies)
-
-    elif product_type == 'books':
+    else:
         data_ratings = pd.DataFrame(data_purchase)
-        data_ratings['rating'] = data_ratings['total_purchases'].apply(rating_to_allpurchases_of_movies)
+        data_ratings['rating'] = data_ratings['total_purchases']
 
 
     print(df_info(data_ratings,'data_ratings'))
@@ -233,17 +321,18 @@ def get_data_with_score(data, data_items_merge):
     #display_data(data_with_score)
 
     data_with_score = data_with_score[['work_id', 'title_x', 'description_x', 'genre_x', 'genre_improved_x',
-                                       'auteur_x', 'url_x', 'genre_improved_multi_x', 'bag_of_words_x', 'score']]
+                                       'author_x', 'url_x', 'genre_improved_multi_x', 'bag_of_words_x', 'price_x', 'score']]
     data_with_score.rename(columns={'title_x': 'title', 'description_x': 'description', 'genre_x': 'genre_1',
-                                    'genre_improved_x': 'genre_improved', 'auteur_x': 'auteur',
+                                    'genre_improved_x': 'genre_improved', 'author_x': 'author',
                                     'url_x': 'url', 'genre_improved_multi_x': 'genre_improved_multi',
+                                    'price_x': 'price',
                                     'bag_of_words_x': 'bag_of_words'}, inplace=True)
     return data_with_score
 
 @solara.component
-def exploreData():
+def exploreData(product_type='movies'):
 
-    data = get_data(product_id=None, count=None)
+    data = get_data(product_type=product_type, product_id=None, count=None)
     display_data(data)
 
     solara.Markdown(
@@ -267,7 +356,7 @@ def exploreData():
     """
     )
 
-    data_purchase = get_data_users_purchases(user_id=None, count=None)
+    data_purchase = get_data_users_purchases(product_type=product_type, user_id=None, count=None)
     display_data(data_purchase)
 
     solara.Markdown(
@@ -276,7 +365,7 @@ def exploreData():
     """
     )
 
-    data_views = get_data_users_page_views(user_id=None, count=None)
+    data_views = get_data_users_page_views(product_type=product_type, user_id=None, count=None)
     display_data(data_views)
 
     solara.Markdown(
@@ -285,7 +374,7 @@ def exploreData():
     """
     )
 
-    data_users = get_data_users(user_id=None, count=None)
+    data_users = get_data_users(product_type=product_type, user_id=None, count=None)
     display_data(data_users)
 
 
@@ -296,7 +385,7 @@ def exploreData():
     )
 
     # Application du Rating sur les spectacles (fictif)
-    data_ratings = get_data_ratings(data_purchase)
+    data_ratings = get_data_ratings(data_purchase, product_type)
 
     data_items_merge = get_data_item_score(data, data_ratings)
     display_data(data_items_merge)
