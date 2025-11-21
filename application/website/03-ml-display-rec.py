@@ -188,7 +188,7 @@ def Page():
                 show_title = row['title']
                 show_genre = row['genre_1']
                 show_year = str(row['year'])
-                show_score = str(row['score'])
+                show_score = f"{row['score']:.5f}" if pd.notna(row['score']) else "-"
                 show_info = f"{show_year} - {show_genre} "
                 show_price_raw = row.get('price')
                 price_text = None

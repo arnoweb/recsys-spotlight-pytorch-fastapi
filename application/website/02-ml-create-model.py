@@ -41,8 +41,8 @@ slider_rmse_iteration_default = solara.reactive(0)
 def Page():
     solara.Markdown(
         f"""
-        # Machine Learning - Recommandation d'oeuvres
-        # 2 > Création du modèle
+        # Machine Learning - Recommandation de produits
+        ## Création et évaluation du modèle de données 
     """
     )
 

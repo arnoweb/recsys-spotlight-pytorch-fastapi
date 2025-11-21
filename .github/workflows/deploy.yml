@@ -32,6 +32,11 @@ jobs:
           command -v docker >/dev/null 2>&1 || curl -fsSL https://get.docker.com | sh
           
           docker rm -f licenses-apilic-1 || true
+
+          # .env pour compose
+          cat > application/api/.env <<ENV
+          PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }}
+          ENV
           
           docker compose build recsys
           docker compose up -d recsys

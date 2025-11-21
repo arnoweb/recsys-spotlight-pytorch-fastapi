@@ -218,7 +218,7 @@ def predict_items_from_user(model, data, user_id, count: int = 3):
     return rec_predict_works_sorted
 
 
-def predict_items_from_user_api(data_work_type, data_works, data_purchases, user_id, count: int = 3):
+def predict_items_from_user_api(product_type, data_works, data_purchases, user_id, count: int = 3):
 
     # We don't want to propose works that the user has already buy
     data_works_purchased_by_user = data_purchases[data_purchases['user_id'] == user_id]
@@ -236,7 +236,7 @@ def predict_items_from_user_api(data_work_type, data_works, data_purchases, user
         data_works_filtered = data_works
 
     # Use of the Torch model loaded
-    rec_model = load_model(data_work_type)
+    rec_model = load_model(product_type)
 
     rec_df_rating = predict_items_from_user(rec_model, data_works_filtered, int(user_id), count)
 
@@ -353,7 +353,8 @@ def model_content_recommender(title, cosine_sim, df, indices, limit=4,
 
 def model_vector_db_init():
 
-    load_dotenv()
+    #load_dotenv()
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "..", "api", ".env"))
     pinecone_api_key = os.getenv("PINECONE_API_KEY")
 
     pc = Pinecone(api_key=pinecone_api_key)
@@ -402,10 +403,10 @@ def model_generate_embeddings(data_similarities):
     return model, embeddings
 
 
-def model_vector_indexing(data_works, data_similarities_prepared_for_vectors):
+def model_vector_indexing(data_works, data_similarities_prepared_for_vectors, product_type):
 
     # Select Index
-    index = model_vector_create_index()
+    index = model_vector_create_index(product_type)
 
     # Create embeddings
     model, embeddings = model_generate_embeddings(data_similarities_prepared_for_vectors)
@@ -426,7 +427,7 @@ def model_vector_indexing(data_works, data_similarities_prepared_for_vectors):
 
     index.upsert(
         vectors=vectors,
-        namespace="recsys_movies"
+        namespace=product_type
     )
 
     time.sleep(10)  # Wait for the upserted vectors to be indexed
@@ -439,10 +440,10 @@ def model_vector_indexing(data_works, data_similarities_prepared_for_vectors):
     return index, model, total_vectors
 
 
-def model_content_recommender_vectors(data_works, data_similarities, title, count):
+def model_content_recommender_vectors(data_works, data_similarities, title, count, product_type):
 
     # Select Index
-    index = model_vector_create_index()
+    index = model_vector_create_index(product_type)
 
     # Get Model
     model = model_vector_getModel()
@@ -455,7 +456,7 @@ def model_content_recommender_vectors(data_works, data_similarities, title, coun
     #print(query_embedding)
 
     results = index.query(
-        namespace="recsys_movies",
+        namespace=product_type,
         vector=query_embedding,
         top_k=count,
         include_values=False,

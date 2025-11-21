@@ -91,11 +91,44 @@ def Page():
     )
 
     solara.Markdown(
-        """Cas d’usage “utilisateur non connecté” : cette page illustre un démarrage à froid. On combine deux techniques :\n"
-        "- **Content-based** – analyse du contenu (descriptions, genres, auteurs) pour proposer des alternatives proches de l’article consulté.\n"
-        "- **Popularité** – classement des meilleures ventes fictives (achats récents) pour mettre en avant les produits les plus demandés.\n"
-        "Ainsi, même sans profil utilisateur, on peut déjà suggérer des produits pertinents."""
+        f"""
+        ## Suggestions personnalisées en fonction du produit sélectionné
+    """
     )
+
+    solara.Markdown(
+        f"""L’objectif est de fournir une expérience de découverte et d'exploration de produits
+        e-commerce ou oeuvres culturelles à l'utilisateur, en croisant analyse du contenu et intéractions. 
+        La solution présentée ici permet de proposer à ses utilisateurs des suggestions de façon automatisée, 
+        évolutive et très qualifiée. Lest techniques de Machine Learning sont utilisées pour répondre à cet objectif.
+    """
+    )
+    solara.Markdown(
+        f"""Nous utilisons une techniques sur cette page de démonstration, qui pourrait être la page Produit de votre site web
+        et cela sans que votre utilisateur soit encore connecté, c'est ce que l'on appelle le démarrage à froid (ou Cold start).
+        Un bloc 'Vous aimerez aussi' et un bloc 'Les utilisateurs ont aussi aimé' affichent des produits sur un niveau
+        de pertinence très élévé et sur un matching des données intelligents, bien plus évolué que les techniques habituelles
+        de requête SQL par exemple présent généralement sur un site web standard. 
+    """
+    )
+    solara.Markdown(
+        f"""
+    La méthode de recommandation utilisée ici est le content-based filtering (ou filtrage basé sur le contenu).
+    Ce système analyse les caractéristiques propres des produits/oeuvres et suggère des alternatives dont le profil est le plus proche.
+    Nous avons couplé ce système à un filtre supplémentaire qui est celui de la popularité basée sur des ventes fictives.
+    """
+    )
+
+    solara.Markdown(
+        f"""Ainsi, même sans profil utilisateur, on peut déjà suggérer des produits pertinents.
+    """
+    )
+    solara.Markdown(
+        """
+        **Accès API** : les mêmes algorithmes sont disponibles via notre [API](/recsys-api/docs). Consultez cette documentation pour tester les endpoints et intégrer rapidement les recommandations dans vos produits.
+        """
+    )
+
     if show_raw_tables.value:
         solara.Markdown(
             f"""
@@ -158,6 +191,24 @@ def Page():
 
     # Create a bag of words composed with different features
     data['bag_of_words'] = data[data.columns[1:6]].apply(lambda x: ' '.join(x), axis=1)
+
+    if products_type_selected == "shoes" and 'price' in data.columns:
+        def bucketize_price(value):
+            try:
+                price = float(value)
+            except (TypeError, ValueError):
+                return ""
+
+            if price < 80:
+                return "price_low"
+            if price < 130:
+                return "price_mid"
+            if price < 180:
+                return "price_high"
+            return "price_premium"
+
+        data['price_bucket'] = data['price'].apply(bucketize_price)
+        data['bag_of_words'] = data['bag_of_words'] + ' ' + data['price_bucket']
     # Clean HTML of bag of words
     data['bag_of_words'] = data['bag_of_words'].apply(lambda x: cleanHTML(x))
 
@@ -429,7 +480,7 @@ def Page():
             show_title = row['title']
             show_genre = row['genre_1']
             show_year = str(row['year'])
-            show_score = str(row['score'])
+            show_score = f"{row['score']:.5f}" if pd.notna(row['score']) else "-"
             show_info = f"{show_year} - {show_genre} "
             show_price_raw = row['price'] if 'price' in row.index else None
             price_text = None
@@ -493,7 +544,7 @@ def Page():
 
             show_title = row['title']
             show_genre = row['genre_1']
-            show_score = str(row['score'])
+            show_score = f"{row['score']:.5f}" if pd.notna(row['score']) else "-"
             show_price_raw = row['price'] if 'price' in row.index else None
             price_text = None
             if pd.notna(show_price_raw):

@@ -7,7 +7,7 @@ venv/
 *.pyc
 __pycache__/
 .vercel
-.env
+application/api/.env*
 credentials.json
 ploomber-cloud.json
 deploy.sh

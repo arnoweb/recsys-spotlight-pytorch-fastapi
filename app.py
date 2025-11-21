@@ -24,12 +24,20 @@ UseModelApp = load_solara_page(recsys_useModel_app_path)
 
 # Routes for the central menu
 routes = [
-    solara.Route(path="/", component=HomeApp, label="Recommendations products - content-based and collaborative filtering - list products from one product"),
-    solara.Route(path="createmodel", component=CreateModelApp, label="Recommendations products -Create Model if needed - patience..."),
-    solara.Route(path="usemodel", component=UseModelApp, label="Recommendations products - list products based on model of users rating of products"),
+    solara.Route(path="/", component=HomeApp, label="LIKYLY - Solution IA de recommandations de produits/oeuvres/articles - demo"),
+    solara.Route(path="use-the-IA-Model", component=UseModelApp,
+                 label="LIKYLY - Solution IA de recommandations de produits/oeuvres/articles - demo"),
+    solara.Route(path="evaluate-the-IA-model", component=CreateModelApp, label="LIKYLY - Solution IA de recommandations de produits/oeuvres/articles - demo"),
+
 ]
 
 
+LABELS = {
+    "/": "Accueil",
+    "model": "LIKYLY – Démo recommandations",
+    "Ceci est un test": "LIKYLY – Solution IA de recommandations de produits/œuvres/articles - demo",
+    # ajoute ici les autres routes si besoin
+}
 
 @solara.component
 def Page():
@@ -40,6 +48,10 @@ def Page():
             for route in routes:
                 with solara.Link(route):
                     current = route_current is route
-                    solara.Button(f"Go to {route.path}", color="red" if current else None)
+                    # On privilégie le label de la route, sinon fallback sur le path
+                    label = getattr(route, "label", None) or f"Go to {route.path}"
+                    solara.Button(label, color="red" if current else None)
     return main
+
+
 

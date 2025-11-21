@@ -87,9 +87,9 @@ tags_metadata = [
 def update_model():
     with httpx.Client() as client:
         #local
-        #response = client.get("http://127.0.0.1:8765/generateModel?data_work_type=movies")
+        #response = client.get("http://127.0.0.1:8765/generateModel?data_product_type=movies")
         #distant docker
-        response = client.get("http://127.0.0.1:8080/recsys-api/generateModel?data_work_type=movies")
+        response = client.get("http://127.0.0.1:8080/recsys-api/generateModel?data_product_type=movies")
         print("Task executed with response:", response.json())
 
 
@@ -117,9 +117,10 @@ app = FastAPI(title="ML API - Predict Rec Products",
               )
 
 
-class typeOfDataWork(str, Enum):
-    value1 = "movies"
-    value2 = "shows"
+class DataProductType(str, Enum):
+    movies = "movies"
+    shoes = "shoes"
+    books = "books"
 
 class Item(BaseModel):
     count: int = Field(default='3')
@@ -132,53 +133,50 @@ async def root():
     return {"message": "API- Recommandation System based either on Machine Learning Model Spotlight TfidfVectorizer or Pinecone with encoding model all-MiniLM-L12-v2"}
 
 @app.get("/products", tags=["getProducts"])
-async def getProducts(product_id: Optional[int] = None, count: Optional[int] = None):
+async def getProducts(data_product_type: DataProductType, product_id: Optional[int] = None, count: Optional[int] = None):
     # List of products (works, movies, shows)
-    data = get_data(product_id, count).to_json(orient='records')
+    data = get_data(data_product_type.value, product_id, count).to_json(orient='records')
     return data
 
 @app.get("/users", tags=["getUsers"])
-async def getUsers(user_id: Optional[int] = None, count: Optional[int] = None):
+async def getUsers(data_product_type: DataProductType, user_id: Optional[int] = None, count: Optional[int] = None):
     # List of users
-    data = get_data_users(user_id, count).to_json(orient='records')
+    data = get_data_users(data_product_type.value, user_id, count).to_json(orient='records')
     return data
 
 @app.get("/usersPurchases", tags=["getUsersPurchases"])
-async def getUsersPurchases(user_id: Optional[int] = None, count: Optional[int] = None):
+async def getUsersPurchases(data_product_type: DataProductType, user_id: Optional[int] = None, count: Optional[int] = None):
     # List of users purchases
-    data = get_data_users_purchases(user_id, count).to_json(orient='records')
+    data = get_data_users_purchases(data_product_type.value, user_id, count).to_json(orient='records')
     return data
 
 @app.get("/usersRatings", tags=["getUsersRatings"])
-async def usersRatings(user_id: Optional[int] = None, count: Optional[int] = None):
+async def usersRatings(data_product_type: DataProductType, user_id: Optional[int] = None, count: Optional[int] = None):
     # List of users purchases
-    data = get_data_users_ratings(user_id, count).to_json(orient='records')
+    data = get_data_users_ratings(data_product_type.value, user_id, count).to_json(orient='records')
     return data
 
 @app.get("/usersPageViews", tags=["getUsersPageViews"])
-async def usersPageViews(user_id: Optional[int] = None, count: Optional[int] = None):
+async def usersPageViews(data_product_type: DataProductType, user_id: Optional[int] = None, count: Optional[int] = None):
     # List of users purchases
-    data = get_data_users_page_views(user_id, count).to_json(orient='records')
+    data = get_data_users_page_views(data_product_type.value, user_id, count).to_json(orient='records')
     return data
 
 @app.get("/usersTags", tags=["getUsersTags"])
-async def usersTags(user_id: Optional[int] = None, count: Optional[int] = None):
+async def usersTags(data_product_type: DataProductType, user_id: Optional[int] = None, count: Optional[int] = None):
     # List of users purchases
-    data = get_data_users_tags(user_id, count).to_json(orient='records')
+    data = get_data_users_tags(data_product_type.value, user_id, count).to_json(orient='records')
     return data
 
 @app.get("/generateModel", tags=["generateModel"])
-async def generate_model(data_work_type:typeOfDataWork):
+async def generate_model(data_product_type: DataProductType):
+    product_type = data_product_type.value
 
-    if data_work_type == 'shows':
-        data_purchase = get_data_users_purchases(user_id=None, count=None)
-        data_ratings = get_data_ratings(data_purchase)
-    elif data_work_type == 'movies':
-        data_purchase = get_data_users_purchases(user_id=None, count=None)
-        data_ratings = get_data_users_ratings(user_id = None, count = None)
-    else:
-        data_purchase = get_data_users_purchases(user_id=None, count=None)
-        data_ratings = get_data_ratings(data_purchase)
+    data_purchase = get_data_users_purchases(product_type, user_id=None, count=None)
+    data_ratings = get_data_users_ratings(product_type, user_id=None, count=None)
+
+    if data_ratings.empty or 'rating' not in data_ratings.columns:
+        data_ratings = get_data_ratings(data_purchase, product_type)
 
     #create dataset interaction with Spotlight
     dataset = create_dataset_interactions(data_ratings)
@@ -193,15 +191,15 @@ async def generate_model(data_work_type:typeOfDataWork):
                                                                              with_model_fit=1)
 
     #save the model
-    df_message = save_model(users_rating_model,data_work_type)
+    df_message = save_model(users_rating_model, product_type)
 
     return df_message
 
 @app.get("/getRec/content/{product_id}/{count}", tags=["getRecContent"])
-async def get_rec_content(data_work_type:typeOfDataWork, product_id: int, count: int):
+async def get_rec_content(data_product_type: DataProductType, product_id: int, count: int):
     #try:
         # List of works
-        data_works = get_data(product_id=None, count=None)
+        data_works = get_data(data_product_type.value, product_id=None, count=None)
         # Get Work Title from the ID
         title = data_works.loc[data_works['work_id'] == product_id, 'title'].iloc[0]
         # create bags of words
@@ -228,10 +226,10 @@ async def get_rec_content(data_work_type:typeOfDataWork, product_id: int, count:
     #    return {'error': error}
 
 @app.get("/getRec/contentVec/createIndex", tags=["getRecContentVectorCreateIndex"])
-async def get_rec_content_vectordb_init(data_work_type:typeOfDataWork):
+async def get_rec_content_vectordb_init(data_product_type: DataProductType):
     #try:
         # List of works
-        data_works = get_data(product_id=None, count=None)
+        data_works = get_data(data_product_type.value, product_id=None, count=None)
         # create bag of words
         data_similarities = get_data_similarities(data_works)
         # get only bag of words and convert it to dictionnary
@@ -240,7 +238,11 @@ async def get_rec_content_vectordb_init(data_work_type:typeOfDataWork):
         data_similarities_dict = data_similarities.to_dict(orient='records')
         data_similarities_prepared_for_vectors = data_similarities[["id","bag_of_words"]].to_dict(orient='records')
 
-        index, model, total_vectors = model_vector_indexing(data_similarities_dict, data_similarities_prepared_for_vectors)
+        index, model, total_vectors = model_vector_indexing(
+            data_similarities_dict,
+            data_similarities_prepared_for_vectors,
+            data_product_type.value
+        )
 
         endpoint_response = {
             "message": f"OK, Vector Index was created and total of {total_vectors} vectors were added to the index"
@@ -252,10 +254,10 @@ async def get_rec_content_vectordb_init(data_work_type:typeOfDataWork):
     #    return {'error': error}
 
 @app.get("/getRec/contentVec/{product_id}/{count}", tags=["getRecContentVectorDb"])
-async def get_rec_content_vectordb(data_work_type:typeOfDataWork, product_id: int, count: int):
+async def get_rec_content_vectordb(data_product_type: DataProductType, product_id: int, count: int):
     #try:
         # List of works
-        data_works = get_data(product_id=None, count=None)
+        data_works = get_data(data_product_type.value, product_id=None, count=None)
         # Get Work Title from the ID
         title = data_works.loc[data_works['work_id'] == product_id, 'title'].iloc[0]
         # create bag of words
@@ -270,7 +272,13 @@ async def get_rec_content_vectordb(data_work_type:typeOfDataWork, product_id: in
         #print(data_works[:3])
         #print(data_similarities_prepared_for_vectors[:3])
 
-        predictOutput = model_content_recommender_vectors(data_similarities_dict, data_similarities_prepared_for_vectors, title, count)
+        predictOutput = model_content_recommender_vectors(
+            data_similarities_dict,
+            data_similarities_prepared_for_vectors,
+            title,
+            count,
+            data_product_type.value
+        )
 
         ## Transform to JSON
         rec_df_json = json.dumps(predictOutput)
@@ -281,16 +289,16 @@ async def get_rec_content_vectordb(data_work_type:typeOfDataWork, product_id: in
     #    return {'error': error}
 
 
-@app.get("/getRec/collaborative/{data_work_type}/{user_id}/{count}", tags=["getRecCollaborative"])
-async def get_rec_collaborative(data_work_type:typeOfDataWork, user_id: int, count: int):
+@app.get("/getRec/collaborative/{user_id}/{count}", tags=["getRecCollaborative"])
+async def get_rec_collaborative(data_product_type: DataProductType, user_id: int, count: int):
     #try:
         # List of works
-        data_works = get_data(product_id=None, count=None)
+        data_works = get_data(data_product_type.value, product_id=None, count=None)
 
         # List of works purchased by users - exclusion of works products buy previously by the user - to not rec those to him
-        data_purchases = get_data_users_purchases(user_id=None, count=None)
+        data_purchases = get_data_users_purchases(data_product_type.value, user_id=None, count=None)
 
-        predictOutput = predict_items_from_user_api(data_work_type, data_works, data_purchases, user_id, count)
+        predictOutput = predict_items_from_user_api(data_product_type.value, data_works, data_purchases, user_id, count)
 
         return predictOutput
 
