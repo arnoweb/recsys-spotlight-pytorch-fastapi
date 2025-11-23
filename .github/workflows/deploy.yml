@@ -26,15 +26,15 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no deployer@${{ secrets.DIGITALOCEAN_HOST }} 'bash -se' <<'EOF'
           set -euo pipefail
-          cd ~/app/licenses
+          cd ~/app/recsys
           
           # Install Docker if missing
           command -v docker >/dev/null 2>&1 || curl -fsSL https://get.docker.com | sh
           
-          if [ -n "$(docker ps -aq -f name=licenses-apilic-1)" ]; then
-            docker rm -f licenses-apilic-1
+          if [ -n "$(docker ps -aq -f name=licenses-recsys-1)" ]; then
+            docker rm -f licenses-recsys-1
           else
-            echo "Container  licenses-apilic-1 not present"
+            echo "Container  licenses-recsys-1 not present"
           fi
 
           # .env pour compose
