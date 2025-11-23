@@ -109,8 +109,15 @@ async def lifespan(app: FastAPI):
 
 
 #app = FastAPI(lifespan=lifespan, title="ML API - Predict Rec Products", description="Get predicted recommendated products", version="0.0.1", openapi_tags=tags_metadata)
+app_description = (
+    "API to serve product/movie/book recommendations based on Machine Learning - AI model.\n\n"
+    "- Catalog endpoints to list products, users and their interactions\n"
+    "- Content-based recommendations (TF-IDF/CountVectorizer + cosine similarity)\n"
+    "- Collaborative filtering powered by Spotlight models, plus utilities to trigger training and vector DB indexing (Pinecone vectors DB)"
+)
+
 app = FastAPI(title="ML API - Predict Rec Products",
-              description="Get predicted recommendated products",
+              description=app_description,
               version="0.0.1",
               openapi_tags=tags_metadata,
               root_path="/recsys-api"
