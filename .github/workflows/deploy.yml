@@ -31,8 +31,10 @@ jobs:
           # Install Docker if missing
           command -v docker >/dev/null 2>&1 || curl -fsSL https://get.docker.com | sh
           
-          if docker ps -aq -f name=licenses-apilic-1 >/dev/null; then
+          if [ -n "$(docker ps -aq -f name=licenses-apilic-1)" ]; then
             docker rm -f licenses-apilic-1
+          else
+            echo "Container  licenses-apilic-1 not present"
           fi
 
           # .env pour compose
