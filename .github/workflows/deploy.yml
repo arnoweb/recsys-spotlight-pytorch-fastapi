@@ -31,7 +31,9 @@ jobs:
           # Install Docker if missing
           command -v docker >/dev/null 2>&1 || curl -fsSL https://get.docker.com | sh
           
-          docker rm -f licenses-apilic-1 || true
+          if docker ps -aq -f name=licenses-apilic-1 >/dev/null; then
+            docker rm -f licenses-apilic-1
+          fi
 
           # .env pour compose
           cat > application/api/.env <<ENV
