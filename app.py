@@ -22,6 +22,14 @@ HomeApp = load_solara_page(recsys_home_app_path)
 CreateModelApp = load_solara_page(recsys_createModel_app_path)
 UseModelApp = load_solara_page(recsys_useModel_app_path)
 
+GTM_ID = "GTM-W4MNT473"
+GTM_HEAD_SNIPPET = f"""(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
+new Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+}})(window,document,'script','dataLayer','{GTM_ID}');"""
+GTM_NOSCRIPT_SNIPPET = f'<iframe src="https://www.googletagmanager.com/ns.html?id={GTM_ID}" height="0" width="0" style="display:none;visibility:hidden"></iframe>'
+
 # Routes for the central menu
 routes = [
     solara.Route(path="/", component=HomeApp, label="LIKYLY - Solution IA de recommandations de produits/oeuvres/articles - demo"),
@@ -43,6 +51,9 @@ LABELS = {
 def Page():
     route_current, routes = solara.use_route()
     with solara.VBox() as main:
+        with solara.Head():
+            solara.HTML(tag="script", unsafe_innerHTML=GTM_HEAD_SNIPPET)
+        solara.HTML(tag="noscript", unsafe_innerHTML=GTM_NOSCRIPT_SNIPPET)
         solara.Info("Note the address bar in the browser. It should change to the path of the link.")
         with solara.HBox():
             for route in routes:
@@ -52,6 +63,5 @@ def Page():
                     label = getattr(route, "label", None) or f"Go to {route.path}"
                     solara.Button(label, color="red" if current else None)
     return main
-
 
 
