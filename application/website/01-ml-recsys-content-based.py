@@ -104,7 +104,7 @@ def Page():
     """
     )
     solara.Markdown(
-        f"""Nous utilisons une techniques sur cette page de démonstration, qui pourrait être la page Produit de votre site web
+        f"""Nous utilisons une technique de Machine Learning sur cette page de démonstration, qui pourrait être la page Produit de votre site web
         et cela sans que votre utilisateur soit encore connecté, c'est ce que l'on appelle le démarrage à froid (ou Cold start).
         Un bloc 'Vous aimerez aussi' et un bloc 'Les utilisateurs ont aussi aimé' affichent des produits sur un niveau
         de pertinence très élévé et sur un matching des données intelligents, bien plus évolué que les techniques habituelles
